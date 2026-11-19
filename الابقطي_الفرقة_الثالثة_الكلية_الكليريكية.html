@@ -1,0 +1,2440 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="artifact-type" content="tool">
+  <meta name="design-style" content="charter">
+  <title>حاسبة علم الأبقطي وتقويم الشهداء — م. جوزيف عادل يوسف قليني</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600;700&family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Noto+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: light;
+
+      /* 1. Charter Style Tokens */
+      --background: #f7f4ec;
+      --surface-container-low: #fffdf8;
+      --surface-container: #ece5d4;
+      --surface-container-high: #e3dac4;
+
+      --on-surface: #1c1f26;
+      --on-surface-variant: #4f5360;
+
+      --outline: #b08d57;
+      --outline-variant: #d9cfb8;
+
+      --primary: #14213d;
+      --on-primary: #f7f4ec;
+      --primary-container: #e3e6ee;
+      --on-primary-container: #14213d;
+      --secondary: #2d5a4a;
+      --tertiary: #8a6a35;
+      --error: #9b2c2c;
+      --on-error: #f7f4ec;
+
+      --data-1: #14213d;
+      --data-2: #8a6a35;
+      --data-3: #2d5a4a;
+      --data-4: #5b7aa0;
+      --data-context: #c2bba9;
+
+      --font-headline: 'Amiri', 'Libre Caslon Text', serif;
+      --font-body: 'Noto Sans Arabic', 'Inter', sans-serif;
+      --font-label: 'Noto Sans Arabic', 'Inter', sans-serif;
+
+      --rounded: 0.125rem;
+      --rounded-lg: 0.125rem;
+      --rounded-full: 0.125rem;
+
+      --brass-rule: 2px solid var(--outline);
+      --hairline: 1px solid var(--outline-variant);
+      --leaf-underline: 0 1px 0 var(--outline-variant);
+
+      /* 2. Shared Semantic & Focus Tokens */
+      --positive: #2d5a4a;
+      --positive-bg: #e4efe9;
+      --warning: #8a6a35;
+      --warning-bg: #f4ecdc;
+      --error-bg: #f8e8e8;
+      --focus: #14213d;
+      --title-accent: color-mix(in srgb, var(--outline) 75%, var(--on-primary));
+      --title-muted: color-mix(in srgb, var(--on-primary) 82%, var(--primary));
+
+      /* 3. Type Scale (Focused Tool) */
+      --display-size: clamp(1.85rem, 1.4rem + 1.4vw, 2.5rem);
+      --headline-size: clamp(1.35rem, 1.15rem + 0.6vw, 1.75rem);
+      --subhead-size: clamp(1.1rem, 1rem + 0.3vw, 1.3rem);
+      --body-size: clamp(0.95rem, 0.92rem + 0.15vw, 1.03rem);
+      --label-size: 0.8125rem;
+
+      /* 4. Spacing Scale (4pt base) */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-2xl: 4rem;
+
+      /* 5. Motion */
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-micro: 120ms;
+      --dur-short: 220ms;
+      --dur-long: 420ms;
+    }
+
+    /* Base Reset */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      overflow-x: clip;
+      margin: 0;
+      padding: 0;
+      background-color: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: 1.65;
+      letter-spacing: 0;
+      scroll-behavior: smooth;
+    }
+    header { position: static !important; }
+    button, input, select, textarea {
+      font-family: inherit;
+      font-size: inherit;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+
+    /* Focus Rings */
+    :focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    /* Title Band (Charter Signature) */
+    .title-band {
+      background: var(--primary);
+      color: var(--on-primary);
+      padding: var(--space-xl) var(--space-lg) var(--space-lg);
+      border-bottom: 3px solid var(--outline);
+    }
+    .title-band-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .title-top-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-md);
+      margin-bottom: var(--space-md);
+      padding-bottom: var(--space-sm);
+      border-bottom: 1px solid color-mix(in srgb, var(--outline) 45%, var(--primary));
+    }
+    .title-kicker {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 600;
+      color: var(--title-accent);
+    }
+    .author-seal {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-sm);
+      padding: var(--space-xs) var(--space-md);
+      border: 1px solid var(--outline);
+      border-radius: var(--rounded);
+      background: color-mix(in srgb, var(--primary) 75%, var(--outline));
+      color: var(--on-primary);
+      font-size: var(--label-size);
+      font-weight: 600;
+    }
+    .title-band h1 {
+      font-family: var(--font-headline);
+      font-weight: 400;
+      font-size: var(--display-size);
+      line-height: 1.2;
+      margin: 0 0 var(--space-sm);
+      color: var(--on-primary);
+    }
+    .title-band .lede {
+      margin: 0;
+      max-width: 68ch;
+      color: var(--title-muted);
+      font-size: var(--body-size);
+      line-height: 1.65;
+    }
+
+    /* Navigation Strip */
+    .section-nav {
+      background: var(--surface-container-low);
+      border-bottom: var(--hairline);
+    }
+    .section-nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: var(--space-sm) var(--space-lg);
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      align-items: center;
+    }
+    .nav-link {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      padding: var(--space-xs) var(--space-md);
+      color: var(--on-surface-variant);
+      text-decoration: none;
+      font-size: var(--label-size);
+      font-weight: 600;
+      border-bottom: 2px solid transparent;
+      transition: color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out), background-color var(--dur-micro) var(--ease-out);
+    }
+    .nav-link:hover, .nav-link:focus-visible {
+      color: var(--primary);
+      background-color: var(--surface-container);
+      border-bottom-color: var(--outline);
+    }
+    .nav-link.active {
+      color: var(--primary);
+      border-bottom-color: var(--outline);
+    }
+
+    /* Page Grid */
+    .page-grid {
+      display: grid;
+      gap: var(--space-xl);
+      padding: var(--space-xl) var(--space-lg);
+      max-width: 1200px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+    .page-grid * { min-width: 0; }
+
+    /* Section Headings (Charter Brass Rule) */
+    .section-block {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-lg);
+    }
+    .section-head {
+      border-top: var(--brass-rule);
+      padding-top: var(--space-md);
+      border-bottom: var(--hairline);
+      padding-bottom: var(--space-sm);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: var(--space-sm);
+    }
+    .section-head h2 {
+      font-family: var(--font-headline);
+      font-weight: 400;
+      font-size: var(--headline-size);
+      line-height: 1.25;
+      margin: 0;
+      color: var(--primary);
+    }
+    .section-sub {
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      margin: 0;
+    }
+
+    /* Controls Panel */
+    .control-leaf {
+      background: var(--surface-container-low);
+      border-top: var(--brass-rule);
+      border-right: var(--hairline);
+      border-left: var(--hairline);
+      border-bottom: var(--hairline);
+      box-shadow: var(--leaf-underline);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+    .control-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+      gap: var(--space-lg);
+      align-items: end;
+    }
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+    .field-label {
+      font-size: var(--label-size);
+      font-weight: 600;
+      color: var(--on-surface);
+      display: block;
+    }
+    .mode-switch {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+    }
+    .mode-btn {
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--rounded);
+      border: 1px solid var(--outline-variant);
+      background: var(--background);
+      color: var(--on-surface);
+      font-weight: 600;
+      font-size: var(--label-size);
+      cursor: pointer;
+      transition: background-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
+    }
+    .mode-btn:hover {
+      background: var(--surface-container);
+      border-color: var(--outline);
+    }
+    .mode-btn.active {
+      background: var(--primary);
+      color: var(--on-primary);
+      border-color: var(--primary);
+    }
+
+    .year-input-row {
+      display: flex;
+      align-items: stretch;
+      gap: var(--space-sm);
+    }
+    .step-btn {
+      min-width: 44px;
+      min-height: 44px;
+      padding: 0 var(--space-md);
+      background: var(--surface-container);
+      color: var(--primary);
+      border: 1px solid var(--outline-variant);
+      border-radius: var(--rounded);
+      font-weight: 700;
+      font-size: 1.15rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color var(--dur-micro) var(--ease-out);
+    }
+    .step-btn:hover { background: var(--surface-container-high); }
+    .step-btn:active { background: var(--primary-container); }
+
+    .text-input, .select-input {
+      min-height: 44px;
+      width: 100%;
+      padding: var(--space-sm) var(--space-md);
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      border: 1px solid var(--outline-variant);
+      border-radius: var(--rounded);
+      font-weight: 600;
+      font-variant-numeric: tabular-nums lining-nums;
+      transition: border-color var(--dur-micro) var(--ease-out), box-shadow var(--dur-micro) var(--ease-out);
+    }
+    .select-input {
+      padding-left: 2.2rem;
+    }
+    .text-input:focus, .select-input:focus {
+      border-color: var(--primary);
+      outline: 2px solid var(--primary);
+      outline-offset: 1px;
+    }
+    .year-display-input {
+      font-family: var(--font-headline);
+      font-size: 1.45rem;
+      text-align: center;
+      font-weight: 700;
+    }
+
+    .presets-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-sm);
+      padding-top: var(--space-sm);
+      border-top: var(--hairline);
+    }
+    .presets-label {
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      font-weight: 600;
+      margin-left: var(--space-xs);
+    }
+    .preset-btn {
+      min-height: 44px;
+      padding: var(--space-xs) var(--space-md);
+      background: transparent;
+      border: 1px solid var(--outline);
+      border-radius: var(--rounded);
+      color: var(--tertiary);
+      font-size: var(--label-size);
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out);
+    }
+    .preset-btn:hover {
+      background: var(--primary-container);
+      color: var(--primary);
+    }
+    .preset-btn.active {
+      background: var(--primary-container);
+      color: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .actions-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+    }
+    .btn-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+    }
+    .btn-primary {
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-lg);
+      background: var(--primary);
+      color: var(--on-primary);
+      border: 1px solid var(--primary);
+      border-radius: var(--rounded);
+      font-weight: 600;
+      font-size: var(--label-size);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-sm);
+      transition: opacity var(--dur-micro) var(--ease-out);
+    }
+    .btn-primary:hover { opacity: 0.92; }
+    .btn-secondary {
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-lg);
+      background: transparent;
+      color: var(--primary);
+      border: 1px solid var(--primary);
+      border-radius: var(--rounded);
+      font-weight: 600;
+      font-size: var(--label-size);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-sm);
+      transition: background-color var(--dur-micro) var(--ease-out);
+    }
+    .btn-secondary:hover { background: var(--primary-container); }
+
+    .status-msg {
+      min-height: 1.4em;
+      font-size: var(--label-size);
+      font-weight: 600;
+    }
+    .status-msg.is-error {
+      color: var(--error);
+      background: var(--error-bg);
+      padding: var(--space-xs) var(--space-sm);
+      border-right: 3px solid var(--error);
+    }
+    .status-msg.is-success {
+      color: var(--positive);
+      background: var(--positive-bg);
+      padding: var(--space-xs) var(--space-sm);
+      border-right: 3px solid var(--positive);
+    }
+
+    /* Key Figure Cards (Charter Signature) */
+    .figures-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+      gap: var(--space-md);
+    }
+    .figure-card {
+      background: var(--surface-container-low);
+      border-top: var(--brass-rule);
+      border-right: var(--hairline);
+      border-left: var(--hairline);
+      border-bottom: var(--hairline);
+      box-shadow: var(--leaf-underline);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md) var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+    .figure-label {
+      font-size: var(--label-size);
+      font-weight: 600;
+      color: var(--on-surface-variant);
+    }
+    .figure-value {
+      font-family: var(--font-headline);
+      font-weight: 400;
+      font-size: clamp(1.45rem, 1.2rem + 0.7vw, 1.85rem);
+      line-height: 1.25;
+      font-variant-numeric: tabular-nums lining-nums;
+      color: var(--primary);
+    }
+    .figure-sub {
+      font-size: var(--label-size);
+      color: var(--on-surface);
+      font-weight: 500;
+    }
+    .figure-delta {
+      font-size: var(--label-size);
+      color: var(--tertiary);
+      font-weight: 600;
+      margin-top: var(--space-xs);
+    }
+    .figure-delta.is-positive {
+      color: var(--positive);
+    }
+
+    /* Asymmetric 2-Column Layout for Derivation & Reference Tables */
+    .asymmetric-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+      gap: var(--space-lg);
+      align-items: start;
+    }
+    .stack-col {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+
+    /* Step Cards */
+    .step-card {
+      background: var(--surface-container-low);
+      border: var(--hairline);
+      border-right: 3px solid var(--primary);
+      border-radius: var(--rounded);
+      padding: var(--space-md) var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+    .step-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      border-bottom: var(--hairline);
+      padding-bottom: var(--space-xs);
+    }
+    .step-title {
+      font-family: var(--font-headline);
+      font-weight: 700;
+      font-size: var(--subhead-size);
+      color: var(--primary);
+      margin: 0;
+    }
+    .step-stamp {
+      display: inline-block;
+      padding: 2px var(--space-sm);
+      border: 1px solid var(--outline);
+      color: var(--tertiary);
+      font-size: 0.75rem;
+      font-weight: 600;
+      border-radius: var(--rounded);
+      white-space: nowrap;
+    }
+    .equation-box {
+      background: var(--background);
+      border: var(--hairline);
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--rounded);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+      font-size: var(--body-size);
+    }
+    .eq-line {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: var(--space-sm);
+    }
+    .eq-formula {
+      color: var(--on-surface-variant);
+    }
+    .eq-result {
+      font-weight: 700;
+      color: var(--primary);
+      font-variant-numeric: tabular-nums lining-nums;
+    }
+    .step-note {
+      margin: 0;
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      line-height: 1.6;
+    }
+
+    /* Mini Lookup Strip (Sun Epact 1-7) */
+    .epact-strip {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: var(--space-xs);
+      margin-top: var(--space-xs);
+    }
+    .epact-cell {
+      background: var(--background);
+      border: var(--hairline);
+      padding: var(--space-xs);
+      text-align: center;
+      border-radius: var(--rounded);
+      font-size: 0.75rem;
+    }
+    .epact-cell.is-active {
+      background: var(--primary);
+      color: var(--on-primary);
+      border-color: var(--primary);
+      font-weight: 700;
+    }
+    .epact-cell-num {
+      display: block;
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+
+    /* Easter Month Mini-Calendar Grid */
+    .month-grid-header {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: var(--space-xs);
+      text-align: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--on-surface-variant);
+      background: var(--surface-container-high);
+      padding: var(--space-xs);
+      border-radius: var(--rounded);
+    }
+    .month-grid {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: var(--space-xs);
+      margin-top: var(--space-xs);
+    }
+    .cal-day {
+      border: var(--hairline);
+      background: var(--background);
+      padding: var(--space-xs);
+      text-align: center;
+      border-radius: var(--rounded);
+      min-height: 44px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+    }
+    .cal-day.is-empty {
+      background: transparent;
+      border-color: transparent;
+    }
+    .cal-day.is-passover {
+      background: var(--warning-bg);
+      border: 2px solid var(--outline);
+      color: var(--on-surface);
+      font-weight: 700;
+    }
+    .cal-day.is-easter {
+      background: var(--primary);
+      border: 2px solid var(--outline);
+      color: var(--on-primary);
+      font-weight: 700;
+    }
+    .cal-day-tag {
+      font-size: 0.65rem;
+      line-height: 1.2;
+      margin-top: 2px;
+    }
+
+    /* Charter Tables */
+    .table-wrap {
+      background: var(--surface-container-low);
+      border-top: var(--brass-rule);
+      border-bottom: var(--hairline);
+      overflow-x: auto;
+    }
+    table.charter-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: var(--label-size);
+    }
+    .charter-table th {
+      background: var(--surface-container-high);
+      color: var(--on-surface);
+      font-weight: 700;
+      text-align: right;
+      padding: var(--space-sm) var(--space-md);
+      border-bottom: var(--brass-rule);
+      white-space: nowrap;
+    }
+    .charter-table td {
+      padding: var(--space-sm) var(--space-md);
+      border-bottom: var(--hairline);
+      color: var(--on-surface);
+      font-variant-numeric: tabular-nums lining-nums;
+      vertical-align: top;
+    }
+    .charter-table tr.is-highlighted {
+      background: var(--primary-container);
+      font-weight: 700;
+    }
+    .charter-table tr.is-major-feast {
+      background: color-mix(in srgb, var(--primary-container) 55%, var(--surface-container-low));
+    }
+    .charter-table caption {
+      text-align: right;
+      padding: var(--space-sm) var(--space-md);
+      font-family: var(--font-headline);
+      font-weight: 700;
+      font-size: var(--subhead-size);
+      color: var(--primary);
+      background: var(--surface-container-low);
+    }
+
+    /* Liturgical Span Chart */
+    .span-chart-card {
+      background: var(--surface-container-low);
+      border: var(--hairline);
+      border-top: var(--brass-rule);
+      padding: var(--space-md) var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+    .span-bar {
+      display: flex;
+      width: 100%;
+      min-height: 36px;
+      border: 1px solid var(--outline-variant);
+      border-radius: var(--rounded);
+      overflow: hidden;
+    }
+    .span-seg {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0 var(--space-xs);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .seg-nativity { background: var(--surface-container-high); color: var(--on-surface); }
+    .seg-lent { background: var(--data-2); color: var(--on-primary); }
+    .seg-pentecost { background: var(--data-1); color: var(--on-primary); }
+    .seg-apostles { background: var(--data-3); color: var(--on-primary); }
+    .span-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-md);
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+    }
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+    .legend-swatch {
+      width: 12px;
+      height: 12px;
+      border-radius: var(--rounded);
+      display: inline-block;
+    }
+
+    /* Converter Section */
+    .converter-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+      gap: var(--space-lg);
+    }
+    .converter-card {
+      background: var(--surface-container-low);
+      border-top: var(--brass-rule);
+      border-right: var(--hairline);
+      border-left: var(--hairline);
+      border-bottom: var(--hairline);
+      padding: var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+    .converter-card h3 {
+      font-family: var(--font-headline);
+      font-size: var(--subhead-size);
+      font-weight: 700;
+      margin: 0;
+      color: var(--primary);
+    }
+    .date-inputs-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr) minmax(0, 1.2fr);
+      gap: var(--space-sm);
+      align-items: end;
+    }
+    .converter-result-box {
+      background: var(--background);
+      border: var(--hairline);
+      border-right: 3px solid var(--secondary);
+      padding: var(--space-md);
+      border-radius: var(--rounded);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+    .conv-main-date {
+      font-family: var(--font-headline);
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    .conv-meta {
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+    }
+
+    /* Fixed Feasts Filter & Cards */
+    .filter-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+    }
+    .filter-btn {
+      min-height: 44px;
+      padding: var(--space-xs) var(--space-md);
+      background: var(--surface-container-low);
+      border: 1px solid var(--outline-variant);
+      border-radius: var(--rounded);
+      color: var(--on-surface);
+      font-size: var(--label-size);
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out);
+    }
+    .filter-btn:hover {
+      background: var(--surface-container);
+      border-color: var(--outline);
+    }
+    .filter-btn.active {
+      background: var(--primary);
+      color: var(--on-primary);
+      border-color: var(--primary);
+    }
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(275px, 100%), 1fr));
+      gap: var(--space-md);
+    }
+    .feast-card {
+      background: var(--surface-container-low);
+      border: var(--hairline);
+      border-top: var(--brass-rule);
+      padding: var(--space-md);
+      border-radius: var(--rounded);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+    .feast-cat {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--tertiary);
+    }
+    .feast-cat.is-green {
+      color: var(--secondary);
+    }
+    .feast-name {
+      font-family: var(--font-headline);
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin: 0;
+    }
+    .feast-dates {
+      font-size: var(--label-size);
+      font-weight: 600;
+      color: var(--on-surface);
+    }
+    .feast-desc {
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      margin: 0;
+    }
+
+    /* Concepts Cards */
+    .concepts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+      gap: var(--space-md);
+    }
+    .concept-card {
+      background: var(--surface-container-low);
+      border: var(--hairline);
+      border-right: 3px solid var(--outline);
+      padding: var(--space-md) var(--space-lg);
+      border-radius: var(--rounded);
+    }
+    .concept-card h3 {
+      font-family: var(--font-headline);
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin: 0 0 var(--space-xs);
+    }
+    .concept-card p {
+      margin: 0;
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      line-height: 1.7;
+    }
+
+    /* Footer */
+    .site-footer {
+      background: var(--primary);
+      color: var(--on-primary);
+      border-top: 3px solid var(--outline);
+      padding: var(--space-xl) var(--space-lg);
+      margin-top: var(--space-xl);
+    }
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+    .footer-author {
+      font-family: var(--font-headline);
+      font-size: var(--subhead-size);
+      color: var(--title-accent);
+      margin: 0;
+    }
+    .footer-sources {
+      font-size: var(--label-size);
+      color: var(--title-muted);
+      margin: 0;
+      line-height: 1.7;
+    }
+
+    /* Responsive Breakpoints */
+    @media (max-width: 900px) {
+      .asymmetric-grid { grid-template-columns: 1fr; }
+      .control-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      .page-grid {
+        grid-template-columns: 1fr;
+        padding: var(--space-md);
+        gap: var(--space-lg);
+      }
+      .title-band { padding: var(--space-lg) var(--space-md); }
+      .section-nav-inner { padding: var(--space-xs) var(--space-md); }
+      .date-inputs-row { grid-template-columns: 1fr; }
+      .epact-strip { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="title-band">
+    <div class="title-band-inner">
+      <div class="title-top-row">
+        <span class="title-kicker">الحساب الفلكي السكندري الموثق • البابا ديمتريوس الكرام</span>
+        <div class="author-seal">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z"></path>
+          </svg>
+          <span>إعداد ومعد الموقع: م. جوزيف عادل يوسف قليني</span>
+        </div>
+      </div>
+      <h1>حاسبة علم الأبقطي والتقويم القبطي وتقويم الشهداء</h1>
+      <p class="lede">
+        تطبيق تفاعلي وعلمي متكامل لحساب أعياد القيامة والأصوام المتحركة وفق قواعد الكنيسة القبطية الأرثوذكسية ودورة ميتون الفلكية، مع بيان الخطوات الحسابية التفصيلية، ومحوّل التقويمين، ودليل الأعياد الثابتة.
+      </p>
+    </div>
+  </header>
+
+  <nav class="section-nav" aria-label="أقسام الموقع">
+    <div class="section-nav-inner">
+      <a class="nav-link active" href="#calculator-section">الحاسبة والنتائج</a>
+      <a class="nav-link" href="#steps-section">خطوات الحل التفصيلية</a>
+      <a class="nav-link" href="#movable-section">الأصوام والأعياد المتحركة</a>
+      <a class="nav-link" href="#converter-section">محوّل التقويمين</a>
+      <a class="nav-link" href="#fixed-section">الأعياد الثابتة</a>
+      <a class="nav-link" href="#concepts-section">المفاهيم الإكليريكية</a>
+    </div>
+  </nav>
+
+  <main class="page-grid">
+
+    <!-- 1. Calculator & Lead-with-Result -->
+    <section id="calculator-section" class="section-block">
+      <div class="section-head">
+        <h2>الحاسبة الفلكية والملخص السنوي</h2>
+        <p class="section-sub">أدخل سنة الشهداء أو السنة الميلادية لاستخراج كافة الحسابات والأعياد فوراً</p>
+      </div>
+
+      <div class="control-leaf">
+        <div class="control-grid">
+          <div class="field-group">
+            <span class="field-label">نظام الإدخال</span>
+            <div class="mode-switch">
+              <button type="button" id="mode-coptic-btn" class="mode-btn active" onclick="setInputMode('coptic')">
+                سنة الشهداء القبطية (ش)
+              </button>
+              <button type="button" id="mode-greg-btn" class="mode-btn" onclick="setInputMode('gregorian')">
+                السنة الميلادية لعيد القيامة (م)
+              </button>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label for="year-input" id="year-input-label" class="field-label">أدخل سنة الشهداء (من ١ إلى ٣٠٠٠ ش)</label>
+            <div class="year-input-row">
+              <button type="button" class="step-btn" aria-label="إنقاص سنة" onclick="stepYear(-1)">−</button>
+              <input type="text" id="year-input" class="text-input year-display-input" inputmode="numeric" value="١٧٤٣" oninput="handleYearTyping(this.value)" onblur="normalizeYearInputDisplay()">
+              <button type="button" class="step-btn" aria-label="زيادة سنة" onclick="stepYear(1)">+</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="presets-row">
+          <span class="presets-label">أمثلة مرجعية سريعة:</span>
+          <button type="button" class="preset-btn" data-coptic="1705" onclick="selectPresetCoptic(1705)">١٧٠٥ ش / ١٩٨٩ م (مثال المرجع)</button>
+          <button type="button" class="preset-btn" data-coptic="1706" onclick="selectPresetCoptic(1706)">١٧٠٦ ش / ١٩٩٠ م (مرجع بهمان)</button>
+          <button type="button" class="preset-btn" data-coptic="1742" onclick="selectPresetCoptic(1742)">١٧٤٢ ش / ٢٠٢٦ م</button>
+          <button type="button" class="preset-btn" data-coptic="1743" onclick="selectPresetCoptic(1743)">١٧٤٣ ش / ٢٠٢٧ م (الحالية)</button>
+          <button type="button" class="preset-btn" data-coptic="1744" onclick="selectPresetCoptic(1744)">١٧٤٤ ش / ٢٠٢٨ م (كبيسة ميلادية)</button>
+        </div>
+
+        <div class="actions-row">
+          <div id="input-status" class="status-msg" role="status" aria-live="polite"></div>
+          <div class="btn-group">
+            <button type="button" class="btn-secondary" onclick="copySummaryToClipboard()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <rect x="9" y="9" width="13" height="13" rx="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              <span>نسخ ملخص السنة</span>
+            </button>
+            <button type="button" class="btn-primary" onclick="exportYearReport()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              <span>تصدير التقرير السنوي</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4 Headline Figure Cards -->
+      <div class="figures-grid">
+        <article class="figure-card">
+          <span class="figure-label">عيد القيامة المجيد</span>
+          <div id="fig-easter-coptic" class="figure-value">—</div>
+          <div id="fig-easter-greg" class="figure-sub">—</div>
+          <div id="fig-easter-meta" class="figure-delta is-positive">—</div>
+        </article>
+
+        <article class="figure-card">
+          <span class="figure-label">رأس السنة القبطية (١ توت / النيروز)</span>
+          <div id="fig-ny-coptic" class="figure-value">—</div>
+          <div id="fig-ny-greg" class="figure-sub">—</div>
+          <div id="fig-ny-leap" class="figure-delta">—</div>
+        </article>
+
+        <article class="figure-card">
+          <span class="figure-label">ذبح خروف الفصح اليهودي (١٤ نيسان)</span>
+          <div id="fig-passover-coptic" class="figure-value">—</div>
+          <div id="fig-passover-greg" class="figure-sub">—</div>
+          <div id="fig-passover-meta" class="figure-delta">—</div>
+        </article>
+
+        <article class="figure-card">
+          <span class="figure-label">الصوم الكبير وصوم الآباء الرسل</span>
+          <div id="fig-lent-coptic" class="figure-value">—</div>
+          <div id="fig-lent-greg" class="figure-sub">—</div>
+          <div id="fig-apostles-meta" class="figure-delta is-positive">—</div>
+        </article>
+      </div>
+    </section>
+
+    <!-- 2. Step-by-Step Worked Equations -->
+    <section id="steps-section" class="section-block">
+      <div class="section-head">
+        <h2>الخطوات التفصيلية لحساب الأبقطي</h2>
+        <p class="section-sub">شرح كل معادلة وباقٍ حسابي وفق منهج البابا ديمتريوس الكرام وكتاب التقويم وحساب الأبقطي</p>
+      </div>
+
+      <div class="asymmetric-grid">
+        <div class="stack-col">
+          <!-- Step 1: Sun Cycle & Epact -->
+          <article class="step-card">
+            <div class="step-header">
+              <h3 class="step-title">أولاً: استخراج دور الشمس وأبقطي الشمس وأول السنة</h3>
+              <span class="step-stamp" id="badge-sun-epact">—</span>
+            </div>
+            <div id="step1-equations" class="equation-box"></div>
+            <p class="step-note">
+              نبدأ بطرح العدد الثابت ٤ من سنة الشهداء، ثم نقسم على ٢٨ (دور الشمس)، وبإضافة الربع الصحيح بلا كسور وإسقاط الأسابيع (٧/٧) نحصل على أبقطي الشمس، ونبدأ العدّ من يوم الأربعاء دائماً:
+            </p>
+            <div id="sun-epact-strip" class="epact-strip"></div>
+          </article>
+
+          <!-- Step 2: Moon Cycle & Epact -->
+          <article class="step-card">
+            <div class="step-header">
+              <h3 class="step-title">ثانياً: استخراج دور القمر وأبقطي القمر</h3>
+              <span class="step-stamp" id="badge-moon-epact">—</span>
+            </div>
+            <div id="step2-equations" class="equation-box"></div>
+            <p class="step-note">
+              يُستخرج دور القمر (من ١ إلى ١٩ وفق دورة ميتون الفلكية) بطريقتين متطابقتين: من سنة الشهداء بطرح ١ والقسمة على ١٩، أو من السنة الميلادية لعيد القيامة بالقسمة المباشرة على ١٩، ثم نضرب في ١١ يوماً (الفرق السنوي بين الشمسية والقمرية) ونسقط الشهور التامة (٣٠ يوماً).
+            </p>
+          </article>
+
+          <!-- Step 3: Passover Date -->
+          <article class="step-card">
+            <div class="step-header">
+              <h3 class="step-title">ثالثاً: تحديد موعد ذبح خروف الفصح اليهودي</h3>
+              <span class="step-stamp" id="badge-passover-rule">—</span>
+            </div>
+            <div id="step3-equations" class="equation-box"></div>
+            <p id="step3-note" class="step-note"></p>
+          </article>
+
+          <!-- Step 4: Resurrection Sunday Calendar Grid -->
+          <article class="step-card">
+            <div class="step-header">
+              <h3 class="step-title">رابعاً: تعيين أحد القيامة المجيد على جدول الشهر</h3>
+              <span class="step-stamp" id="badge-easter-day">—</span>
+            </div>
+            <div id="step4-equations" class="equation-box"></div>
+            <p class="step-note">
+              أوصى الآباء الرسل في الدسقولية (باب ٣١) ألا يُعيَّد الفصح مع اليهود ولا قبلهم، بل في يوم الأحد الذي يلي ذبح الخروف مباشرة؛ فإذا وافق ذبح الخروف يوم الأحد، يُؤجَّل عيد القيامة إلى الأحد التالي (+٧ أيام).
+            </p>
+            <div>
+              <div id="easter-cal-title" class="field-label" style="margin-bottom: var(--space-xs);"></div>
+              <div class="month-grid-header">
+                <span>أحد</span><span>إثنين</span><span>ثلاثاء</span><span>أربعاء</span><span>خميس</span><span>جمعة</span><span>سبت</span>
+              </div>
+              <div id="easter-month-grid" class="month-grid"></div>
+            </div>
+          </article>
+
+          <!-- Step 5: Derived Feasts & Fasts Formulas -->
+          <article class="step-card">
+            <div class="step-header">
+              <h3 class="step-title">خامساً: معادلات الأعياد والأصوام المتنقلة من تاريخ القيامة</h3>
+              <span class="step-stamp" id="badge-derived">—</span>
+            </div>
+            <div id="step5-equations" class="equation-box"></div>
+            <p class="step-note">
+              جميع المواسم المتحركة مرتبطة باليوم المنقضي من شهر عيد القيامة (برمهات أو برمودة) وفق القواعد الأبقطية المختصرة.
+            </p>
+          </article>
+        </div>
+
+        <!-- Right Reference Column: 13 Months & 19-Year Metonic Table -->
+        <div class="stack-col">
+          <div class="table-wrap">
+            <table class="charter-table">
+              <caption id="months-table-caption">بداية الشهور القبطية طوال السنة</caption>
+              <thead>
+                <tr>
+                  <th>م</th>
+                  <th>الشهر القبطي</th>
+                  <th>أيامه</th>
+                  <th>أول يوم أسبوعي</th>
+                  <th>المقابل الميلادي</th>
+                </tr>
+              </thead>
+              <tbody id="coptic-months-tbody"></tbody>
+            </table>
+          </div>
+
+          <div class="table-wrap">
+            <table class="charter-table">
+              <caption>جدول الدورة الميتونية (١–١٩) ومواعيد الفصح</caption>
+              <thead>
+                <tr>
+                  <th>دور القمر</th>
+                  <th>أبقطي القمر</th>
+                  <th>ذبح الخروف</th>
+                </tr>
+              </thead>
+              <tbody id="metonic-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Movable Feasts & Fasts Calendar -->
+    <section id="movable-section" class="section-block">
+      <div class="section-head">
+        <h2>خريطة الأصوام والأعياد المتحركة</h2>
+        <p class="section-sub">الجدول الزمني الكامل للمواسم المتنقلة باليوم القبطي والميلادي للسنة المختارة</p>
+      </div>
+
+      <div class="span-chart-card">
+        <div class="field-label">توزيع الفترات الليتورجية بين الميلاد ونهاية صوم الرسل</div>
+        <div id="liturgical-span-bar" class="span-bar" role="img" aria-label="توزيع الفترات الليتورجية في السنة"></div>
+        <div id="liturgical-span-legend" class="span-legend"></div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="charter-table">
+          <caption id="movable-table-caption">الأصوام والأعياد المتحركة</caption>
+          <thead>
+            <tr>
+              <th>المناسبة الكنسية</th>
+              <th>اليوم</th>
+              <th>التاريخ القبطي</th>
+              <th>التاريخ الميلادي</th>
+              <th>القاعدة الأبقطية</th>
+            </tr>
+          </thead>
+          <tbody id="movable-tbody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 4. Coptic <-> Gregorian Calendar Converter -->
+    <section id="converter-section" class="section-block">
+      <div class="section-head">
+        <h2>محوّل التواريخ والربط بين التقويم الميلادي وتقويم الشهداء</h2>
+        <p class="section-sub">تحويل دقيق بين التقويمين مع مراعاة السنوات الكبيسة القبطية الإضافية والكبيسة الميلادية</p>
+      </div>
+
+      <div class="converter-grid">
+        <!-- Gregorian -> Coptic -->
+        <article class="converter-card">
+          <h3>التحويل من الميلادي إلى القبطي (الشهداء)</h3>
+          <div class="date-inputs-row">
+            <div class="field-group">
+              <label for="conv-g-day" class="field-label">اليوم الميلادي</label>
+              <input type="text" id="conv-g-day" class="text-input" inputmode="numeric" value="١٩" oninput="convertGregToCoptic()">
+            </div>
+            <div class="field-group">
+              <label for="conv-g-month" class="field-label">الشهر الميلادي</label>
+              <select id="conv-g-month" class="select-input" onchange="convertGregToCoptic()"></select>
+            </div>
+            <div class="field-group">
+              <label for="conv-g-year" class="field-label">السنة الميلادية</label>
+              <input type="text" id="conv-g-year" class="text-input" inputmode="numeric" value="٢٠٢٦" oninput="convertGregToCoptic()">
+            </div>
+          </div>
+          <div id="conv-g-status" class="status-msg" role="status"></div>
+          <div class="converter-result-box">
+            <span class="field-label">التاريخ القبطي المقابل</span>
+            <div id="conv-g-result" class="conv-main-date">—</div>
+            <div id="conv-g-meta" class="conv-meta">—</div>
+          </div>
+        </article>
+
+        <!-- Coptic -> Gregorian -->
+        <article class="converter-card">
+          <h3>التحويل من القبطي (الشهداء) إلى الميلادي</h3>
+          <div class="date-inputs-row">
+            <div class="field-group">
+              <label for="conv-c-day" class="field-label">اليوم القبطي</label>
+              <input type="text" id="conv-c-day" class="text-input" inputmode="numeric" value="١٠" oninput="convertCopticToGreg()">
+            </div>
+            <div class="field-group">
+              <label for="conv-c-month" class="field-label">الشهر القبطي</label>
+              <select id="conv-c-month" class="select-input" onchange="convertCopticToGreg()"></select>
+            </div>
+            <div class="field-group">
+              <label for="conv-c-year" class="field-label">سنة الشهداء</label>
+              <input type="text" id="conv-c-year" class="text-input" inputmode="numeric" value="١٧٤٣" oninput="convertCopticToGreg()">
+            </div>
+          </div>
+          <div id="conv-c-status" class="status-msg" role="status"></div>
+          <div class="converter-result-box">
+            <span class="field-label">التاريخ الميلادي المقابل</span>
+            <div id="conv-c-result" class="conv-main-date">—</div>
+            <div id="conv-c-meta" class="conv-meta">—</div>
+          </div>
+        </article>
+      </div>
+
+      <div class="concepts-grid">
+        <article class="concept-card">
+          <h3>قاعدة تحويل السنة الإفرنجية إلى الشهداء (٢٨٤ / ٢٨٣)</h3>
+          <p>
+            من ١ يناير حتى ١٠ سبتمبر: نطرح من السنة الميلادية العدد الثابت ٢٨٤. ومن ١٢ سبتمبر حتى ٣١ ديسمبر: نطرح العدد ٢٨٣. أما يوم ١١ سبتمبر، فإن اتفق أن باقي قسمة كل من السنة الميلادية والسنة القبطية (بعد طرح ٢٨٤) على ٤ يساوي ٣، كان ١١ سبتمبر هو «٦ نسئ» من السنة الكبيسة الإضافية، وإلا فهو «١ توت» من السنة القبطية الجديدة.
+          </p>
+        </article>
+        <article class="concept-card">
+          <h3>الكبيسة القبطية والكبيسة الميلادية وفرق ١٣ يوماً</h3>
+          <p>
+            طول سنة الشهداء ٣٦٥ يوماً و٦ ساعات بالضبط، بينما السنة الشمسية الميلادية (بعد التعديل الغريغوري عام ١٥٨٢ م) ٣٦٥ يوماً و٥ ساعات و٤٨ دقيقة و٤٦ ثانية؛ فيتراكم فرق ١١ دقيقة و١٤ ثانية سنوياً ليبلغ يوماً كاملاً كل ١٢٨ سنة، وقد صار الفارق في عصرنا الحاضر ١٣ يوماً كاملة، ولذلك يقع ١ برمهات دائماً في ١٠ مارس.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- 5. Fixed Feasts Reference Guide -->
+    <section id="fixed-section" class="section-block">
+      <div class="section-head">
+        <h2>المرجع الكنسي للأعياد الثابتة التاريخ</h2>
+        <p id="fixed-subhead" class="section-sub">الأعياد السيدية الكبرى والصغرى وأعياد السيدة العذراء مريم مع التاريخ الميلادي المقابل للسنة المختارة</p>
+      </div>
+
+      <div class="filter-row" role="group" aria-label="تصفية الأعياد">
+        <button type="button" class="filter-btn active" data-filter="all" onclick="setFeastFilter('all')">جميع الأعياد</button>
+        <button type="button" class="filter-btn" data-filter="major" onclick="setFeastFilter('major')">الأعياد السيدية الكبرى (٧)</button>
+        <button type="button" class="filter-btn" data-filter="minor" onclick="setFeastFilter('minor')">الأعياد السيدية الصغرى (٧)</button>
+        <button type="button" class="filter-btn" data-filter="marian" onclick="setFeastFilter('marian')">أعياد السيدة العذراء مريم</button>
+      </div>
+
+      <div id="fixed-feasts-grid" class="card-grid"></div>
+    </section>
+
+    <!-- 6. Liturgical & Historical Concepts -->
+    <section id="concepts-section" class="section-block">
+      <div class="section-head">
+        <h2>المفاهيم الطقسية والتاريخية — إرث البابا ديمتريوس الكرام</h2>
+        <p class="section-sub">توثيق المصطلحات الإكليريكية والأصول الفلكية لعلم الأبقطي</p>
+      </div>
+
+      <div class="concepts-grid">
+        <article class="concept-card">
+          <h3>معنى مصطلح «الأبقطي»</h3>
+          <p>
+            كلمة معربة من اليونانية «إباكتوس» وتعني الباقي أو الفاضل، ودخلت إلى القبطية بصيغة «بي أوپ إنتي تي أبكتي» بمعنى فاضل الشمس وفاضل القمر. وسُمي هذا العلم بحساب الأبقطي لأنه يعتمد في خطواته على البواقي الحسابية الناتجة عن الفارق بين السنة الشمسية والسنة القمرية (نحو ١١ يوماً سنوياً).
+          </p>
+        </article>
+
+        <article class="concept-card">
+          <h3>البابا ديمتريوس الكرام ومجمع نيقية (٣٢٥ م)</h3>
+          <p>
+            تشهد المخطوطات الكنسية (كمخطوط ٢٣٠ لاهوت بالمكتبة البطريركية ومؤلفات العلامة شمس الرئاسة ابن كبر والأنبا ساويرس ابن المقفع) أن البابا ديمتريوس الكرام، البطريرك الثاني عشر للإسكندرية، هو الذي وضع حساب الأبقطي. وفي مجمع نيقية المسكوني سنة ٣٢٥ م، أسند الآباء إلى بطريرك الإسكندرية تحديد موعد عيد القيامة سنوياً وإبلاغ سائر الكنائس برسالة الفصح لبراعة المصريين في الفلك.
+          </p>
+        </article>
+
+        <article class="concept-card">
+          <h3>الدورة الميتونية وضبط التقويمين</h3>
+          <p>
+            استند البابا ديمتريوس إلى قاعدة الفلكي اليوناني الأثيني ميتون الذي لاحظ أن ١٩ سنة شمسية مربعة تعادل ١٩ سنة قمرية مضافاً إليها ٧ أشهر قمرية (أي ٢٣٥ شهراً قمرياً). وبموجب هذه الدورة يتكرر موعد الفصح القمري كل ١٩ عاماً، وتُمكن هذه الحسابات الكنيسة من معرفة يوم ذبح خروف الفصح عند اليهود (المرتبط بإضافة شهر آذار الثاني كل سنتين أو ثلاث) دون الرجوع إليهم.
+          </p>
+        </article>
+
+        <article class="concept-card">
+          <h3>الشعرى اليمانية (سبدت) والشهر الصغير (النسئ)</h3>
+          <p>
+            بنى المصريون القدماء تقويمهم على الشروق الاحتراقي لنجم الشعرى اليمانية (سبدت) مع فيضان النيل عند منف، فجعلوا السنة ١٢ شهراً كل منها ٣٠ يوماً، ثم أضافوا ٥ أيام سمّوها الشهر الصغير «پي كوجي إن أڤوت» أو أيام النسئ، ثم أقرّ الكهنة إضافة يوم سادس كل أربع سنوات (سنة الكبس) لتتوافق السنة مع الفصول الطبيعية بدقة تامة.
+          </p>
+        </article>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p class="footer-author">إعداد ومعد الموقع: م. جوزيف عادل يوسف قليني</p>
+      <p class="footer-sources">
+        المصادر العلمية والطقسية: كتاب «التقويم وحساب الأبقطي» (الأستاذ رشدي واصف بهمان)، محاضرات علم الأبقطي والطقس (الأستاذ إسحق عبد النور)، كتاب الدسقولية (الفصل الحادي والثلاثون) وقوانين الرسل، ومخطوط ٢٣٠ لاهوت بالمكتبة البطريركية.
+      </p>
+    </div>
+  </footer>
+
+  <api-shim></api-shim>
+  <script>
+    const EASTERN_DIGITS = [`٠`, `١`, `٢`, `٣`, `٤`, `٥`, `٦`, `٧`, `٨`, `٩`];
+
+    function toEastern(val) {
+      return String(val).replace(/[0-9]/g, function (d) {
+        return EASTERN_DIGITS[Number(d)];
+      });
+    }
+
+    function toWesternNumber(str) {
+      const cleaned = String(str)
+        .replace(/[٠-٩]/g, function (d) { return String(EASTERN_DIGITS.indexOf(d)); })
+        .replace(/[^\d]/g, ``);
+      return cleaned === `` ? NaN : parseInt(cleaned, 10);
+    }
+
+    const WEEKDAYS = [`الأحد`, `الإثنين`, `الثلاثاء`, `الأربعاء`, `الخميس`, `الجمعة`, `السبت`];
+
+    // Source Table: Sun Epact 1..7 starting from Wednesday
+    const SUN_EPACT_DAYS = [
+      { epact: 1, name: `الأربعاء`, wd: 3 },
+      { epact: 2, name: `الخميس`, wd: 4 },
+      { epact: 3, name: `الجمعة`, wd: 5 },
+      { epact: 4, name: `السبت`, wd: 6 },
+      { epact: 5, name: `الأحد`, wd: 0 },
+      { epact: 6, name: `الإثنين`, wd: 1 },
+      { epact: 7, name: `الثلاثاء`, wd: 2 }
+    ];
+
+    const COPTIC_MONTHS = [
+      `توت`, `بابه`, `هاتور`, `كيهك`, `طوبة`, `أمشير`,
+      `برمهات`, `برمودة`, `بشنس`, `بؤونة`, `أبيب`, `مسرى`, `النسئ`
+    ];
+
+    const GREG_MONTHS = [
+      `يناير`, `فبراير`, `مارس`, `أبريل`, `مايو`, `يونيو`,
+      `يوليو`, `أغسطس`, `سبتمبر`, `أكتوبر`, `نوفمبر`, `ديسمبر`
+    ];
+
+    const METONIC_TABLE = [
+      { cycle: 1, epact: 11, passoverDay: 29, passoverMonth: 7 },
+      { cycle: 2, epact: 22, passoverDay: 18, passoverMonth: 8 },
+      { cycle: 3, epact: 3,  passoverDay: 7,  passoverMonth: 8 },
+      { cycle: 4, epact: 14, passoverDay: 26, passoverMonth: 7 },
+      { cycle: 5, epact: 25, passoverDay: 15, passoverMonth: 8 },
+      { cycle: 6, epact: 6,  passoverDay: 4,  passoverMonth: 8 },
+      { cycle: 7, epact: 17, passoverDay: 23, passoverMonth: 8 },
+      { cycle: 8, epact: 28, passoverDay: 12, passoverMonth: 8 },
+      { cycle: 9, epact: 9,  passoverDay: 1,  passoverMonth: 8 },
+      { cycle: 10, epact: 20, passoverDay: 20, passoverMonth: 8 },
+      { cycle: 11, epact: 1,  passoverDay: 9,  passoverMonth: 8 },
+      { cycle: 12, epact: 12, passoverDay: 28, passoverMonth: 7 },
+      { cycle: 13, epact: 23, passoverDay: 17, passoverMonth: 8 },
+      { cycle: 14, epact: 4,  passoverDay: 6,  passoverMonth: 8 },
+      { cycle: 15, epact: 15, passoverDay: 25, passoverMonth: 7 },
+      { cycle: 16, epact: 26, passoverDay: 14, passoverMonth: 8 },
+      { cycle: 17, epact: 7,  passoverDay: 3,  passoverMonth: 8 },
+      { cycle: 18, epact: 18, passoverDay: 22, passoverMonth: 8 },
+      { cycle: 19, epact: 29, passoverDay: 10, passoverMonth: 8 }
+    ];
+
+    // App State
+    let appState = {
+      inputMode: `coptic`,
+      copticYear: 1743,
+      feastFilter: `all`,
+      convGreg: { day: 19, month: 11, year: 2026 },
+      convCoptic: { day: 10, month: 3, year: 1743 }
+    };
+
+    // Exact JDN Algorithms
+    function copticToJdn(y, m, d) {
+      const leapDaysBefore = Math.floor(y / 4);
+      return 1825030 + (y - 1) * 365 + leapDaysBefore + (m - 1) * 30 + (d - 1);
+    }
+
+    function jdnToCoptic(jdn) {
+      const daysSinceEpoch = jdn - 1825030;
+      const cycle = Math.floor(daysSinceEpoch / 1461);
+      const rem = daysSinceEpoch - cycle * 1461;
+      let yInCycle = 1;
+      let dayOfYear = rem;
+      if (rem >= 1096) {
+        yInCycle = 4;
+        dayOfYear = rem - 1096;
+      } else if (rem >= 730) {
+        yInCycle = 3;
+        dayOfYear = rem - 730;
+      } else if (rem >= 365) {
+        yInCycle = 2;
+        dayOfYear = rem - 365;
+      }
+      const year = cycle * 4 + yInCycle;
+      const month = Math.floor(dayOfYear / 30) + 1;
+      const day = (dayOfYear % 30) + 1;
+      return { year: year, month: month, day: day };
+    }
+
+    function gregorianToJdn(y, m, d) {
+      const a = Math.floor((14 - m) / 12);
+      const y1 = y + 4800 - a;
+      const m1 = m + 12 * a - 3;
+      return d + Math.floor((153 * m1 + 2) / 5) + 365 * y1 + Math.floor(y1 / 4) - Math.floor(y1 / 100) + Math.floor(y1 / 400) - 32045;
+    }
+
+    function julianToJdn(y, m, d) {
+      const a = Math.floor((14 - m) / 12);
+      const y1 = y + 4800 - a;
+      const m1 = m + 12 * a - 3;
+      return d + Math.floor((153 * m1 + 2) / 5) + 365 * y1 + Math.floor(y1 / 4) - 32083;
+    }
+
+    function jdnToGregorian(jdn) {
+      // Pre-Oct 15, 1582 (JDN < 2299161): convert as Julian calendar for historical accuracy
+      if (jdn < 2299161) {
+        const b = 0;
+        const c = jdn + 32082;
+        const d = Math.floor((4 * c + 3) / 1461);
+        const e = c - Math.floor((1461 * d) / 4);
+        const m = Math.floor((5 * e + 2) / 153);
+        const day = e - Math.floor((153 * m + 2) / 5) + 1;
+        const month = m + 3 - 12 * Math.floor(m / 10);
+        const year = 100 * b + d - 4800 + Math.floor(m / 10);
+        return { year: year, month: month, day: day, isJulian: true };
+      }
+      const a = jdn + 32044;
+      const b = Math.floor((4 * a + 3) / 146097);
+      const c = a - Math.floor((146097 * b) / 4);
+      const d = Math.floor((4 * c + 3) / 1461);
+      const e = c - Math.floor((1461 * d) / 4);
+      const m = Math.floor((5 * e + 2) / 153);
+      const day = e - Math.floor((153 * m + 2) / 5) + 1;
+      const month = m + 3 - 12 * Math.floor(m / 10);
+      const year = 100 * b + d - 4800 + Math.floor(m / 10);
+      return { year: year, month: month, day: day, isJulian: false };
+    }
+
+    function jdnWeekdayIndex(jdn) {
+      // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+      return (jdn + 1) % 7;
+    }
+
+    function isCopticLeap(yc) {
+      return (yc % 4) === 3;
+    }
+
+    function isGregorianLeap(yg) {
+      if (yg <= 1582) return (yg % 4) === 0;
+      return (yg % 4 === 0 && yg % 100 !== 0) || (yg % 400 === 0);
+    }
+
+    function formatCopticDate(c) {
+      return `${toEastern(c.day)} ${COPTIC_MONTHS[c.month - 1]} ${toEastern(c.year)} ش`;
+    }
+
+    function formatCopticShort(c) {
+      return `${toEastern(c.day)} ${COPTIC_MONTHS[c.month - 1]}`;
+    }
+
+    function formatGregDate(g) {
+      const calTag = g.isJulian ? ` م (يولياني)` : ` م`;
+      return `${toEastern(g.day)} ${GREG_MONTHS[g.month - 1]} ${toEastern(g.year)}${calTag}`;
+    }
+
+    function computeEpactYear(yc) {
+      // 1. Sun Cycle & Epact
+      const sunMinus4 = yc - 4;
+      let sunCycle = ((sunMinus4 % 28) + 28) % 28;
+      if (sunCycle === 0) sunCycle = 28;
+      const sunQuarter = Math.floor(sunCycle / 4);
+      const sunSum = sunCycle + sunQuarter;
+      let sunEpact = sunSum % 7;
+      if (sunEpact === 0) sunEpact = 7;
+
+      const startDayObj = SUN_EPACT_DAYS[sunEpact - 1];
+      const startWd = startDayObj.wd; // 0=Sunday .. 6=Saturday
+
+      // 2. Moon Cycle & Epact
+      const moonMinus1 = yc - 1;
+      let moonCycle = ((moonMinus1 % 19) + 19) % 19;
+      if (moonCycle === 0) moonCycle = 19;
+
+      const gregEasterYear = yc + 284;
+      let moonCycleGreg = gregEasterYear % 19;
+      if (moonCycleGreg === 0) moonCycleGreg = 19;
+
+      const moonTimes11 = moonCycle * 11;
+      const moonEpact = moonTimes11 % 30;
+
+      // 3. Passover (14 Nisan)
+      const rawSub = 40 - moonEpact;
+      const metonicRow = METONIC_TABLE[moonCycle - 1];
+      const passoverMonth = metonicRow.passoverMonth;
+      const passoverDay = metonicRow.passoverDay;
+
+      const passoverJdn = copticToJdn(yc, passoverMonth, passoverDay);
+      const passoverWd = jdnWeekdayIndex(passoverJdn);
+
+      // 4. Easter Sunday (Next Sunday strictly after Passover)
+      let daysAfterPassover = (7 - passoverWd) % 7;
+      if (daysAfterPassover === 0) daysAfterPassover = 7;
+      const easterJdn = passoverJdn + daysAfterPassover;
+      const easterCoptic = jdnToCoptic(easterJdn);
+      const easterGreg = jdnToGregorian(easterJdn);
+
+      // 5. Christmas & Epiphany in this Coptic year
+      // Rule from lecture: when yc % 4 === 0 (the Coptic year whose Jan precedes Feb 29 of a Gregorian leap year),
+      // Jan 7 is 28 Koiak and Jan 19 is 10 Toba; otherwise Jan 7 is 29 Koiak and Jan 19 is 11 Toba.
+      const isPostLeapCoptic = (yc % 4) === 0;
+      const xmasDay = isPostLeapCoptic ? 28 : 29;
+      const epiphanyDay = isPostLeapCoptic ? 10 : 11;
+      const xmasJdn = copticToJdn(yc, 4, xmasDay);
+
+      // Source formula for Rifa' Al-Milad (days from Christmas to Great Lent)
+      const rifaNativityDays = easterCoptic.month === 8
+        ? easterCoptic.day + 36
+        : easterCoptic.day + 6;
+
+      // Movable Feasts & Fasts JDN offsets
+      const jonahRifaJdn = easterJdn - 70;
+      const jonahStartJdn = easterJdn - 69;
+      const jonahEndJdn = easterJdn - 67;
+      const jonahPassoverJdn = easterJdn - 66;
+      const lentRifaJdn = easterJdn - 56;
+      const lentStartJdn = easterJdn - 55;
+      const lentLastFriJdn = easterJdn - 9;
+      const lazarusSatJdn = easterJdn - 8;
+      const palmSunJdn = easterJdn - 7;
+      const covenantThuJdn = easterJdn - 3;
+      const goodFriJdn = easterJdn - 2;
+      const brightSatJdn = easterJdn - 1;
+      const thomasSunJdn = easterJdn + 7;
+      const ascensionJdn = easterJdn + 39;
+      const pentecostJdn = easterJdn + 49;
+      const apostlesStartJdn = easterJdn + 50;
+      const apostlesFeastJdn = copticToJdn(yc, 11, 5); // 5 Abib
+
+      // Apostles' fast length formula from source
+      const apostlesFastDays = easterCoptic.month === 7
+        ? (30 - easterCoptic.day) + 45
+        : (30 - easterCoptic.day) + 15;
+
+      const nyJdn = copticToJdn(yc, 1, 1);
+      const nyGreg = jdnToGregorian(nyJdn);
+
+      return {
+        yc: yc,
+        gregEasterYear: gregEasterYear,
+        isCopticLeapYear: isCopticLeap(yc),
+        isGregEasterLeapYear: isGregorianLeap(gregEasterYear),
+        isPostLeapCoptic: isPostLeapCoptic,
+        sunMinus4: sunMinus4,
+        sunCycle: sunCycle,
+        sunQuarter: sunQuarter,
+        sunSum: sunSum,
+        sunEpact: sunEpact,
+        startDayName: startDayObj.name,
+        startWd: startWd,
+        nyJdn: nyJdn,
+        nyGreg: nyGreg,
+        moonMinus1: moonMinus1,
+        moonCycle: moonCycle,
+        moonCycleGreg: moonCycleGreg,
+        moonTimes11: moonTimes11,
+        moonEpact: moonEpact,
+        rawSub: rawSub,
+        passoverMonth: passoverMonth,
+        passoverDay: passoverDay,
+        passoverJdn: passoverJdn,
+        passoverWd: passoverWd,
+        daysAfterPassover: daysAfterPassover,
+        easterJdn: easterJdn,
+        easterCoptic: easterCoptic,
+        easterGreg: easterGreg,
+        xmasDay: xmasDay,
+        epiphanyDay: epiphanyDay,
+        xmasJdn: xmasJdn,
+        rifaNativityDays: rifaNativityDays,
+        apostlesFastDays: apostlesFastDays,
+        movable: {
+          jonahRifaJdn: jonahRifaJdn,
+          jonahStartJdn: jonahStartJdn,
+          jonahEndJdn: jonahEndJdn,
+          jonahPassoverJdn: jonahPassoverJdn,
+          lentRifaJdn: lentRifaJdn,
+          lentStartJdn: lentStartJdn,
+          lentLastFriJdn: lentLastFriJdn,
+          lazarusSatJdn: lazarusSatJdn,
+          palmSunJdn: palmSunJdn,
+          covenantThuJdn: covenantThuJdn,
+          goodFriJdn: goodFriJdn,
+          brightSatJdn: brightSatJdn,
+          easterJdn: easterJdn,
+          thomasSunJdn: thomasSunJdn,
+          ascensionJdn: ascensionJdn,
+          pentecostJdn: pentecostJdn,
+          apostlesStartJdn: apostlesStartJdn,
+          apostlesFeastJdn: apostlesFeastJdn
+        }
+      };
+    }
+
+    function renderAll() {
+      const data = computeEpactYear(appState.copticYear);
+      renderHeadlineFigures(data);
+      renderSteps(data);
+      renderMonthsTable(data);
+      renderMetonicTable(data);
+      renderMovableSection(data);
+      renderFixedFeasts(data);
+      updatePresetHighlight();
+    }
+
+    function renderHeadlineFigures(data) {
+      const figEasterC = document.getElementById(`fig-easter-coptic`);
+      const figEasterG = document.getElementById(`fig-easter-greg`);
+      const figEasterM = document.getElementById(`fig-easter-meta`);
+      if (figEasterC) figEasterC.textContent = `الأحد ${formatCopticDate(data.easterCoptic)}`;
+      if (figEasterG) figEasterG.textContent = `الموافق ${formatGregDate(data.easterGreg)}`;
+      if (figEasterM) figEasterM.textContent = `انقضى من ${COPTIC_MONTHS[data.easterCoptic.month - 1]}: ${toEastern(data.easterCoptic.day)} يوماً`;
+
+      const figNyC = document.getElementById(`fig-ny-coptic`);
+      const figNyG = document.getElementById(`fig-ny-greg`);
+      const figNyL = document.getElementById(`fig-ny-leap`);
+      if (figNyC) figNyC.textContent = `${data.startDayName} ١ توت ${toEastern(data.yc)} ش`;
+      if (figNyG) figNyG.textContent = `الموافق ${formatGregDate(data.nyGreg)}`;
+      if (figNyL) {
+        figNyL.textContent = data.isCopticLeapYear
+          ? `سنة كبيسة إضافية (النسئ ٦ أيام — ٣٦٦ يوماً)`
+          : `سنة بسيطة قبطية (النسئ ٥ أيام — ٣٦٥ يوماً)`;
+      }
+
+      const passGreg = jdnToGregorian(data.passoverJdn);
+      const figPasC = document.getElementById(`fig-passover-coptic`);
+      const figPasG = document.getElementById(`fig-passover-greg`);
+      const figPasM = document.getElementById(`fig-passover-meta`);
+      if (figPasC) figPasC.textContent = `${WEEKDAYS[data.passoverWd]} ${toEastern(data.passoverDay)} ${COPTIC_MONTHS[data.passoverMonth - 1]}`;
+      if (figPasG) figPasG.textContent = `الموافق ${formatGregDate(passGreg)}`;
+      if (figPasM) figPasM.textContent = `دور القمر: ${toEastern(data.moonCycle)} • أبقطي القمر: ${toEastern(data.moonEpact)}`;
+
+      const lentStartC = jdnToCoptic(data.movable.lentStartJdn);
+      const lentStartG = jdnToGregorian(data.movable.lentStartJdn);
+      const figLentC = document.getElementById(`fig-lent-coptic`);
+      const figLentG = document.getElementById(`fig-lent-greg`);
+      const figAposM = document.getElementById(`fig-apostles-meta`);
+      if (figLentC) figLentC.textContent = `الإثنين ${formatCopticShort(lentStartC)}`;
+      if (figLentG) figLentG.textContent = `الموافق ${formatGregDate(lentStartG)} (رفاع الميلاد: ${toEastern(data.rifaNativityDays)} يوماً)`;
+      if (figAposM) figAposM.textContent = `مدة صوم الآباء الرسل: ${toEastern(data.apostlesFastDays)} يوماً`;
+    }
+
+    function renderSteps(data) {
+      // Badges
+      const bSun = document.getElementById(`badge-sun-epact`);
+      const bMoon = document.getElementById(`badge-moon-epact`);
+      const bPas = document.getElementById(`badge-passover-rule`);
+      const bEas = document.getElementById(`badge-easter-day`);
+      const bDer = document.getElementById(`badge-derived`);
+
+      if (bSun) bSun.textContent = `أبقطي الشمس = ${toEastern(data.sunEpact)}`;
+      if (bMoon) bMoon.textContent = `أبقطي القمر = ${toEastern(data.moonEpact)}`;
+      if (bPas) bPas.textContent = `${toEastern(data.passoverDay)} ${COPTIC_MONTHS[data.passoverMonth - 1]}`;
+      if (bEas) bEas.textContent = `${toEastern(data.easterCoptic.day)} ${COPTIC_MONTHS[data.easterCoptic.month - 1]}`;
+      if (bDer) bDer.textContent = `${toEastern(data.yc)} ش / ${toEastern(data.gregEasterYear)} م`;
+
+      // Step 1
+      const s1 = document.getElementById(`step1-equations`);
+      if (s1) {
+        const divSun = Math.floor(data.sunMinus4 / 28);
+        const remSunText = (data.sunMinus4 % 28 === 0) ? `٠ (نأخذ ٢٨ كاملاً)` : toEastern(data.sunCycle);
+        const weeks7 = Math.floor(data.sunSum / 7);
+        const rem7Text = (data.sunSum % 7 === 0) ? `٠ (نأخذ ٧ كاملاً)` : toEastern(data.sunEpact);
+        s1.innerHTML = `
+          <div class="eq-line"><span class="eq-formula">١. نطرح ٤ من سنة الشهداء: ${toEastern(data.yc)} − ٤</span><span class="eq-result">= ${toEastern(data.sunMinus4)}</span></div>
+          <div class="eq-line"><span class="eq-formula">٢. نقسم على ٢٨ (دور الشمس): ${toEastern(data.sunMinus4)} ÷ ٢٨ = ${toEastern(divSun)} والباقي</span><span class="eq-result">دور الشمس = ${remSunText}</span></div>
+          <div class="eq-line"><span class="eq-formula">٣. نضيف ربع دور الشمس بلا كسور: ${toEastern(data.sunCycle)} + ${toEastern(data.sunQuarter)}</span><span class="eq-result">= ${toEastern(data.sunSum)}</span></div>
+          <div class="eq-line"><span class="eq-formula">٤. نسقط الأسابيع الكاملة (٧ × ${toEastern(weeks7)} = ${toEastern(weeks7 * 7)}): الباقي</span><span class="eq-result">أبقطي الشمس = ${rem7Text} ← ${data.startDayName}</span></div>
+        `;
+      }
+
+      const strip = document.getElementById(`sun-epact-strip`);
+      if (strip) {
+        strip.innerHTML = SUN_EPACT_DAYS.map(function (item) {
+          const activeClass = item.epact === data.sunEpact ? ` is-active` : ``;
+          return `<div class="epact-cell${activeClass}"><span class="epact-cell-num">${toEastern(item.epact)}</span><span>${item.name}</span></div>`;
+        }).join(``);
+      }
+
+      // Step 2
+      const s2 = document.getElementById(`step2-equations`);
+      if (s2) {
+        const divMoonC = Math.floor(data.moonMinus1 / 19);
+        const divMoonG = Math.floor(data.gregEasterYear / 19);
+        const months30 = Math.floor(data.moonTimes11 / 30);
+        s2.innerHTML = `
+          <div class="eq-line"><span class="eq-formula">أ. بسنة الشهداء: (${toEastern(data.yc)} − ١) ÷ ١٩ = ${toEastern(data.moonMinus1)} ÷ ١٩ (${toEastern(divMoonC)} دورة والباقي)</span><span class="eq-result">دور القمر = ${toEastern(data.moonCycle)}</span></div>
+          <div class="eq-line"><span class="eq-formula">ب. بالسنة الميلادية: ${toEastern(data.gregEasterYear)} ÷ ١٩ (${toEastern(divMoonG)} دورة والباقي)</span><span class="eq-result">دور القمر = ${toEastern(data.moonCycleGreg)}</span></div>
+          <div class="eq-line"><span class="eq-formula">ج. نضرب دور القمر × ١١ (فارق الشمسية والقمرية): ${toEastern(data.moonCycle)} × ١١</span><span class="eq-result">= ${toEastern(data.moonTimes11)} يوماً</span></div>
+          <div class="eq-line"><span class="eq-formula">د. نسقط الشهور التامة (${toEastern(months30)} × ٣٠ = ${toEastern(months30 * 30)}): الباقي</span><span class="eq-result">أبقطي القمر = ${toEastern(data.moonEpact)}</span></div>
+        `;
+      }
+
+      // Step 3
+      const s3 = document.getElementById(`step3-equations`);
+      const s3Note = document.getElementById(`step3-note`);
+      if (s3) {
+        let extraLine = ``;
+        if (data.moonCycle === 19) {
+          extraLine = `<div class="eq-line"><span class="eq-formula">٢. تعديل السنة التاسعة عشرة (قفزة القمر): نسقط يوماً إضافياً لتوافق ١١ − ١</span><span class="eq-result">١٠ برمودة</span></div>`;
+        } else if (data.rawSub > 30) {
+          extraLine = `<div class="eq-line"><span class="eq-formula">٢. زاد الناتج عن ٣٠ فنطرح شهراً كاملاً: ${toEastern(data.rawSub)} − ٣٠</span><span class="eq-result">${toEastern(data.passoverDay)} برمودة</span></div>`;
+        } else {
+          const monthRule = data.passoverMonth === 7 ? `يقع بين ٢٥ و٣٠ ← في شهر برمهات` : `يقع بين ١ و٢٣ ← في شهر برمودة`;
+          extraLine = `<div class="eq-line"><span class="eq-formula">٢. تصنيف الشهر (${monthRule})</span><span class="eq-result">${toEastern(data.passoverDay)} ${COPTIC_MONTHS[data.passoverMonth - 1]}</span></div>`;
+        }
+        s3.innerHTML = `
+          <div class="eq-line"><span class="eq-formula">١. القاعدة الثابتة (نطرح أبقطي القمر من ٤٠): ٤٠ − ${toEastern(data.moonEpact)}</span><span class="eq-result">= ${toEastern(data.rawSub)}</span></div>
+          ${extraLine}
+          <div class="eq-line"><span class="eq-formula">٣. اليوم الأسبوعي لـ ${toEastern(data.passoverDay)} ${COPTIC_MONTHS[data.passoverMonth - 1]}</span><span class="eq-result">${WEEKDAYS[data.passoverWd]}</span></div>
+        `;
+      }
+      if (s3Note) {
+        s3Note.textContent = `إذا وقع ناتج القاعدة بين ٢٥ و٣٠ يكون ذبح الخروف في برمهات، وإذا وقع بين ١ و٢٣ يكون في برمودة، ولا يأتي ٢٤ مطلقاً. وفي السنة التاسعة عشرة من دور ميتون (أبقطي القمر ٢٩) يكون الموعد ١٠ برمودة طبقاً لجدول الدورة.`;
+      }
+
+      // Step 4: Easter Sunday & Calendar Grid
+      const s4 = document.getElementById(`step4-equations`);
+      if (s4) {
+        const sameSundayNote = data.passoverWd === 0
+          ? `وافق ذبح الخروف يوم الأحد ذاته؛ لذا نضيف ٧ أيام كاملة ليكون الأحد التالي`
+          : `نحسب الأيام المتبقية حتى الأحد التالي (+${toEastern(data.daysAfterPassover)} ${data.daysAfterPassover === 1 ? `يوم` : `أيام`})`;
+        s4.innerHTML = `
+          <div class="eq-line"><span class="eq-formula">١. يوم ذبح الخروف: ${WEEKDAYS[data.passoverWd]} ${toEastern(data.passoverDay)} ${COPTIC_MONTHS[data.passoverMonth - 1]}</span><span class="eq-result">${sameSundayNote}</span></div>
+          <div class="eq-line"><span class="eq-formula">٢. عيد القيامة المجيد</span><span class="eq-result">الأحد ${formatCopticDate(data.easterCoptic)} (${formatGregDate(data.easterGreg)})</span></div>
+        `;
+      }
+
+      renderEasterMonthCalendar(data);
+
+      // Step 5: Derived Formulas
+      const s5 = document.getElementById(`step5-equations`);
+      if (s5) {
+        const eDay = data.easterCoptic.day;
+        const eMonth = data.easterCoptic.month;
+        const eMonthName = COPTIC_MONTHS[eMonth - 1];
+        const rifaGreat = jdnToCoptic(data.movable.lentRifaJdn);
+        const asc = jdnToCoptic(data.movable.ascensionJdn);
+        const pent = jdnToCoptic(data.movable.pentecostJdn);
+        const remMonth = 30 - eDay;
+
+        const nativityAdd = eMonth === 8 ? 36 : 6;
+        const apostlesAdd = eMonth === 8 ? 15 : 45;
+        const lentRifaRaw = eDay + 4;
+        const lentRifaCalcText = eMonth === 7
+          ? (lentRifaRaw > 30 ? `${toEastern(eDay)} + ٤ = ${toEastern(lentRifaRaw)} ← − ٣٠ = ${toEastern(rifaGreat.day)} أمشير` : `${toEastern(eDay)} + ٤ = ${toEastern(rifaGreat.day)} طوبة`)
+          : (lentRifaRaw > 30 ? `${toEastern(eDay)} + ٤ = ${toEastern(lentRifaRaw)} ← − ٣٠ = ${toEastern(rifaGreat.day)} برمهات` : `${toEastern(eDay)} + ٤ = ${toEastern(rifaGreat.day)} أمشير`);
+
+        const ascRaw = eDay + 9;
+        const ascCalcText = ascRaw > 30
+          ? `${toEastern(eDay)} + ٩ = ${toEastern(ascRaw)} ← − ٣٠ = ${toEastern(asc.day)} ${COPTIC_MONTHS[asc.month - 1]}`
+          : `${toEastern(eDay)} + ٩ = ${toEastern(asc.day)} بشنس`;
+
+        const pentRaw = eDay + 19;
+        const pentCalcText = pentRaw > 30
+          ? `${toEastern(eDay)} + ١٩ = ${toEastern(pentRaw)} ← − ٣٠ = ${toEastern(pent.day)} ${COPTIC_MONTHS[pent.month - 1]}`
+          : `${toEastern(eDay)} + ١٩ = ${toEastern(pent.day)} بشنس`;
+
+        s5.innerHTML = `
+          <div class="eq-line"><span class="eq-formula">رفاع الميلاد (${eMonthName}): ${toEastern(eDay)} + ${toEastern(nativityAdd)}</span><span class="eq-result">= ${toEastern(data.rifaNativityDays)} يوماً</span></div>
+          <div class="eq-line"><span class="eq-formula">أحد رفاع الصوم الكبير: ${lentRifaCalcText}</span><span class="eq-result">${formatCopticShort(rifaGreat)}</span></div>
+          <div class="eq-line"><span class="eq-formula">عيد الصعود المجيد: ${ascCalcText}</span><span class="eq-result">${formatCopticShort(asc)}</span></div>
+          <div class="eq-line"><span class="eq-formula">عيد العنصرة المجيد: ${pentCalcText}</span><span class="eq-result">${formatCopticShort(pent)}</span></div>
+          <div class="eq-line"><span class="eq-formula">عدد أيام صوم الرسل: باقي ${eMonthName} (${toEastern(remMonth)}) + ${toEastern(apostlesAdd)}</span><span class="eq-result">= ${toEastern(data.apostlesFastDays)} يوماً</span></div>
+        `;
+      }
+    }
+
+    function renderEasterMonthCalendar(data) {
+      const titleEl = document.getElementById(`easter-cal-title`);
+      const gridEl = document.getElementById(`easter-month-grid`);
+      if (!gridEl) return;
+
+      // Display the month where Easter occurs (if Passover was in Baramhat and Easter in Parmoute, show Parmoute or note Passover)
+      const displayMonth = data.easterCoptic.month;
+      const firstOfMonthJdn = copticToJdn(data.yc, displayMonth, 1);
+      const firstWd = jdnWeekdayIndex(firstOfMonthJdn);
+
+      if (titleEl) {
+        const extra = data.passoverMonth !== displayMonth
+          ? ` (ملاحظة: ذبح الخروف كان ${toEastern(data.passoverDay)} برمهات)`
+          : ``;
+        titleEl.textContent = `تقويم شهر ${COPTIC_MONTHS[displayMonth - 1]} ${toEastern(data.yc)} ش${extra}`;
+      }
+
+      let cells = [];
+      for (let b = 0; b < firstWd; b++) {
+        cells.push(`<div class="cal-day is-empty" aria-hidden="true"></div>`);
+      }
+      for (let d = 1; d <= 30; d++) {
+        const isPassover = (data.passoverMonth === displayMonth && data.passoverDay === d);
+        const isEaster = (data.easterCoptic.day === d);
+        let cls = `cal-day`;
+        let tag = ``;
+        if (isEaster) {
+          cls += ` is-easter`;
+          tag = `<span class="cal-day-tag">القيامة</span>`;
+        } else if (isPassover) {
+          cls += ` is-passover`;
+          tag = `<span class="cal-day-tag">الفصح</span>`;
+        }
+        cells.push(`<div class="${cls}"><span>${toEastern(d)}</span>${tag}</div>`);
+      }
+      gridEl.innerHTML = cells.join(``);
+    }
+
+    function renderMonthsTable(data) {
+      const caption = document.getElementById(`months-table-caption`);
+      const tbody = document.getElementById(`coptic-months-tbody`);
+      if (caption) caption.textContent = `بداية الشهور القبطية الـ ١٣ لسنة ${toEastern(data.yc)} ش`;
+      if (!tbody) return;
+
+      let rows = [];
+      for (let m = 1; m <= 13; m++) {
+        const jdn = copticToJdn(data.yc, m, 1);
+        const wd = jdnWeekdayIndex(jdn);
+        const greg = jdnToGregorian(jdn);
+        const len = m < 13 ? 30 : (data.isCopticLeapYear ? 6 : 5);
+        const highlight = (m === data.easterCoptic.month) ? ` class="is-highlighted"` : ``;
+        rows.push(`
+          <tr${highlight}>
+            <td>${toEastern(m)}</td>
+            <td>${COPTIC_MONTHS[m - 1]}</td>
+            <td>${toEastern(len)}</td>
+            <td>${WEEKDAYS[wd]}</td>
+            <td>${formatGregDate(greg)}</td>
+          </tr>
+        `);
+      }
+      tbody.innerHTML = rows.join(``);
+    }
+
+    function renderMetonicTable(data) {
+      const tbody = document.getElementById(`metonic-tbody`);
+      if (!tbody) return;
+      tbody.innerHTML = METONIC_TABLE.map(function (row) {
+        const active = row.cycle === data.moonCycle ? ` class="is-highlighted"` : ``;
+        return `
+          <tr${active}>
+            <td>${toEastern(row.cycle)}</td>
+            <td>${toEastern(row.epact)}</td>
+            <td>${toEastern(row.passoverDay)} ${COPTIC_MONTHS[row.passoverMonth - 1]}</td>
+          </tr>
+        `;
+      }).join(``);
+    }
+
+    function renderMovableSection(data) {
+      const caption = document.getElementById(`movable-table-caption`);
+      const tbody = document.getElementById(`movable-tbody`);
+      if (caption) caption.textContent = `جدول الأصوام والأعياد المتحركة — سنة ${toEastern(data.yc)} ش / ${toEastern(data.gregEasterYear)} م`;
+
+      // Proportion bar (Christmas to 5 Abib = ~190 days total)
+      const m = data.movable;
+      const totalSpan = m.apostlesFeastJdn - data.xmasJdn;
+      const nativityLen = m.lentStartJdn - data.xmasJdn;
+      const lentLen = 55;
+      const pentecostLen = 50;
+      const apostlesLen = data.apostlesFastDays;
+      const barEl = document.getElementById(`liturgical-span-bar`);
+      const legEl = document.getElementById(`liturgical-span-legend`);
+
+      if (barEl && totalSpan > 0) {
+        const pNat = (nativityLen / totalSpan) * 100;
+        const pLent = (lentLen / totalSpan) * 100;
+        const pPent = (pentecostLen / totalSpan) * 100;
+        const pApos = (apostlesLen / totalSpan) * 100;
+        barEl.innerHTML = `
+          <div class="span-seg seg-nativity" style="width: ${pNat.toFixed(1)}%">رفاع الميلاد (${toEastern(data.rifaNativityDays)})</div>
+          <div class="span-seg seg-lent" style="width: ${pLent.toFixed(1)}%">الصوم الكبير (٥٥)</div>
+          <div class="span-seg seg-pentecost" style="width: ${pPent.toFixed(1)}%">الخماسين (٥٠)</div>
+          <div class="span-seg seg-apostles" style="width: ${pApos.toFixed(1)}%">صوم الرسل (${toEastern(apostlesLen)})</div>
+        `;
+      }
+      if (legEl) {
+        legEl.innerHTML = `
+          <span class="legend-item"><span class="legend-swatch seg-nativity"></span> رفاع الميلاد: ${toEastern(data.rifaNativityDays)} يوماً</span>
+          <span class="legend-item"><span class="legend-swatch seg-lent"></span> الصوم الكبير: ٥٥ يوماً ثابتة</span>
+          <span class="legend-item"><span class="legend-swatch seg-pentecost"></span> الخماسين المقدسة: ٥٠ يوماً ثابتة</span>
+          <span class="legend-item"><span class="legend-swatch seg-apostles"></span> صوم الرسل: ${toEastern(apostlesLen)} يوماً (يتراوح بين ١٥ و٤٩ يوماً)</span>
+        `;
+      }
+
+      const items = [
+        { name: `أحد رفاع صوم يونان`, jdn: m.jonahRifaJdn, rule: `قبل القيامة بـ ٧٠ يوماً`, major: false },
+        { name: `بداية صوم يونان (٣ أيام)`, jdn: m.jonahStartJdn, rule: `قبل القيامة بـ ٦٩ يوماً`, major: false },
+        { name: `فصح يونان`, jdn: m.jonahPassoverJdn, rule: `قبل القيامة بـ ٦٦ يوماً`, major: false },
+        { name: `أحد رفاع الصوم الكبير`, jdn: m.lentRifaJdn, rule: `قبل القيامة بـ ٥٦ يوماً (تاريخ القيامة + ٤)`, major: false },
+        { name: `بداية الصوم الكبير`, jdn: m.lentStartJdn, rule: `قبل القيامة بـ ٥٥ يوماً`, major: false },
+        { name: `جمعة ختام الصوم`, jdn: m.lentLastFriJdn, rule: `قبل القيامة بـ ٩ أيام`, major: false },
+        { name: `سبت لعازر`, jdn: m.lazarusSatJdn, rule: `قبل القيامة بـ ٨ أيام`, major: false },
+        { name: `أحد الشعانين (سيدي كبير)`, jdn: m.palmSunJdn, rule: `قبل القيامة بـ ٧ أيام`, major: true },
+        { name: `خميس العهد (سيدي صغير)`, jdn: m.covenantThuJdn, rule: `قبل القيامة بـ ٣ أيام`, major: false },
+        { name: `الجمعة العظيمة`, jdn: m.goodFriJdn, rule: `قبل القيامة بيومين`, major: false },
+        { name: `سبت النور`, jdn: m.brightSatJdn, rule: `عشية عيد القيامة`, major: false },
+        { name: `عيد القيامة المجيد (سيدي كبير)`, jdn: m.easterJdn, rule: `الأحد التالي لذبح الخروف`, major: true },
+        { name: `أحد توما (سيدي صغير)`, jdn: m.thomasSunJdn, rule: `الأحد الأول بعد القيامة (+٧ أيام)`, major: false },
+        { name: `عيد الصعود المجيد (سيدي كبير)`, jdn: m.ascensionJdn, rule: `اليوم الـ ٤٠ من القيامة (تاريخ القيامة + ٩)`, major: true },
+        { name: `عيد العنصرة المجيد (سيدي كبير)`, jdn: m.pentecostJdn, rule: `اليوم الـ ٥٠ من القيامة (تاريخ القيامة + ١٩)`, major: true },
+        { name: `بداية صوم الآباء الرسل`, jdn: m.apostlesStartJdn, rule: `الإثنين التالي للعنصرة — مدته ${toEastern(data.apostlesFastDays)} يوماً`, major: false },
+        { name: `عيد الآباء الرسل (بطرس وبولس)`, jdn: m.apostlesFeastJdn, rule: `٥ أبيب ثابت (ختام صوم الرسل)`, major: false }
+      ];
+
+      if (tbody) {
+        tbody.innerHTML = items.map(function (it) {
+          const c = jdnToCoptic(it.jdn);
+          const g = jdnToGregorian(it.jdn);
+          const wd = WEEKDAYS[jdnWeekdayIndex(it.jdn)];
+          const rowCls = it.major ? ` class="is-major-feast"` : ``;
+          return `
+            <tr${rowCls}>
+              <td><strong>${it.name}</strong></td>
+              <td>${wd}</td>
+              <td>${formatCopticDate(c)}</td>
+              <td>${formatGregDate(g)}</td>
+              <td>${it.rule}</td>
+            </tr>
+          `;
+        }).join(``);
+      }
+    }
+
+    function renderFixedFeasts(data) {
+      const grid = document.getElementById(`fixed-feasts-grid`);
+      const subhead = document.getElementById(`fixed-subhead`);
+      if (subhead) {
+        subhead.textContent = `الأعياد السيدية الكبرى والصغرى وأعياد السيدة العذراء مريم مع التاريخ الميلادي لسنة ${toEastern(data.yc)} ش`;
+      }
+      if (!grid) return;
+
+      const m = data.movable;
+      const feasts = [
+        // Major Lordly Feasts (7)
+        { cat: `major`, catLabel: `عيد سيدي كبير — ثابت`, name: `عيد البشارة المجيد`, month: 7, day: 29, desc: `بشارة الملاك جبرائيل للسيدة العذراء بتجسد الكلمة؛ أصل الأعياد.` },
+        { cat: `major`, catLabel: `عيد سيدي كبير — ثابت`, name: `عيد الميلاد المجيد`, month: 4, day: data.xmasDay, desc: `يُحتفل به ٢٩ كيهك (أو ٢٨ كيهك في السنة التي تسبق ٢٩ فبراير ليوافق ٧ يناير).` },
+        { cat: `major`, catLabel: `عيد سيدي كبير — ثابت`, name: `عيد الغطاس المجيد (الظهور الإلهي)`, month: 5, day: data.epiphanyDay, desc: `عماد السيد المسيح في نهر الأردن؛ ١١ طوبة (أو ١٠ طوبة في السنة الكبيسة المقابلة).` },
+        { cat: `major`, catLabel: `عيد سيدي كبير — متحرك`, name: `أحد الشعانين`, jdn: m.palmSunJdn, desc: `دخول السيد المسيح أورشليم منتصراً قبل الآلام بأسبوع.` },
+        { cat: `major`, catLabel: `عيد سيدي كبير — متحرك`, name: `عيد القيامة المجيد`, jdn: m.easterJdn, desc: `عيد الأعياد وموسم المواسم، يتحدد بحساب الأبقطي كل عام.` },
+        { cat: `major`, catLabel: `عيد سيدي كبير — متحرك`, name: `عيد الصعود المجيد`, jdn: m.ascensionJdn, desc: `صعود الرب يسوع إلى السماوات بعد قيامته بأربعين يوماً.` },
+        { cat: `major`, catLabel: `عيد سيدي كبير — متحرك`, name: `عيد العنصرة (حلول الروح القدس)`, jdn: m.pentecostJdn, desc: `حلول الروح القدس على التلاميذ في اليوم الخمسين من القيامة.` },
+
+        // Minor Lordly Feasts (7)
+        { cat: `minor`, catLabel: `عيد سيدي صغير — ثابت`, name: `عيد الختان المجيد`, month: 5, day: 6, desc: `ختان الرب يسوع بالجسد في اليوم الثامن لميلاده (٦ طوبة).` },
+        { cat: `minor`, catLabel: `عيد سيدي صغير — ثابت`, name: `عرس قانا الجليل`, month: 5, day: 13, desc: `أولى آيات السيد المسيح بتحويل الماء إلى خمر جيد (١٣ طوبة).` },
+        { cat: `minor`, catLabel: `عيد سيدي صغير — ثابت`, name: `دخول السيد المسيح الهيكل`, month: 6, day: 8, desc: `تقديم الطفل يسوع إلى الهيكل بعد ٤٠ يوماً ولقاء سمعان الشيخ (٨ أمشير).` },
+        { cat: `minor`, catLabel: `عيد سيدي صغير — ثابت`, name: `دخول السيد المسيح أرض مصر`, month: 9, day: 24, desc: `مجيء العائلة المقدسة إلى أرض مصر ومباركتها (٢٤ بشنس).` },
+        { cat: `minor`, catLabel: `عيد سيدي صغير — ثابت`, name: `عيد التجلي المجيد`, month: 12, day: 13, desc: `تجلي الرب على جبل تابور بحضور موسى وإيليا والتلاميذ (١٣ مسرى).` },
+        { cat: `minor`, catLabel: `عيد سيدي صغير — متحرك`, name: `خميس العهد`, jdn: m.covenantThuJdn, desc: `تأسيس سر الافخارستيا وغسل أرجل التلاميذ في العلية.` },
+        { cat: `minor`, catLabel: `عيد سيدي صغير — متحرك`, name: `أحد توما (أحد التجديد)`, jdn: m.thomasSunJdn, desc: `ظهور الرب للتلاميذ في اليوم الثامن وإعلان إيمان القديس توما.` },
+
+        // Virgin Mary Fixed Feasts
+        { cat: `marian`, catLabel: `عيد مريمي ثابت`, name: `البشارة بميلاد السيدة العذراء (حبل حنة بها)`, month: 12, day: 7, desc: `بشارة الملاك للقديس يواقيم والقديسة حنة بميلاد أم النور (٧ مسرى).` },
+        { cat: `marian`, catLabel: `عيد مريمي ثابت`, name: `ميلاد السيدة العذراء مريم`, month: 9, day: 1, desc: `ميلاد والدة الإله مريم من أبويها البارَّين يواقيم وحنة (١ بشنس).` },
+        { cat: `marian`, catLabel: `عيد مريمي ثابت`, name: `دخول السيدة العذراء الهيكل`, month: 4, day: 3, desc: `تقديم الطفلة مريم لتخدم في هيكل الرب وهي ابنة ثلاث سنوات (٣ كيهك).` },
+        { cat: `marian`, catLabel: `عيد مريمي ثابت`, name: `نياحة السيدة العذراء مريم`, month: 5, day: 21, desc: `انتقال روح والدة الإله الطاهرة إلى السماء بسلام (٢١ طوبة).` },
+        { cat: `marian`, catLabel: `عيد مريمي ثابت`, name: `صعود جسد السيدة العذراء`, month: 12, day: 16, desc: `إعلان صعود جسد القديسة مريم الطاهر إلى السماء بعد ١٥ يوماً من الصوم (١٦ مسرى).` },
+        { cat: `marian`, catLabel: `عيد مريمي ثابت`, name: `ظهور السيدة العذراء بالزيتون`, month: 7, day: 24, desc: `ذكرى التجلي النوراني للسيدة العذراء على قباب كنيستها بالزيتون عام ١٩٦٨ م (٢٤ برمهات).` },
+        { cat: `marian`, catLabel: `عيد مريمي ثابت`, name: `عيد العذراء حالة الحديد وتكريس أول كنيسة`, month: 10, day: 21, desc: `تذكار بناء أول كنيسة على اسمها بفيلبي وحل قيود متياس الرسول (٢١ بؤونة) والتذكار الشهري كل ٢١ قبطي.` }
+      ];
+
+      const filtered = appState.feastFilter === `all`
+        ? feasts
+        : feasts.filter(function (f) { return f.cat === appState.feastFilter; });
+
+      grid.innerHTML = filtered.map(function (f) {
+        const jdn = f.jdn ? f.jdn : copticToJdn(data.yc, f.month, f.day);
+        const c = jdnToCoptic(jdn);
+        const g = jdnToGregorian(jdn);
+        const wd = WEEKDAYS[jdnWeekdayIndex(jdn)];
+        const catCls = f.cat === `marian` ? `feast-cat is-green` : `feast-cat`;
+        return `
+          <article class="feast-card">
+            <span class="${catCls}">${f.catLabel}</span>
+            <h3 class="feast-name">${f.name}</h3>
+            <div class="feast-dates">${wd} ${formatCopticDate(c)} • ${formatGregDate(g)}</div>
+            <p class="feast-desc">${f.desc}</p>
+          </article>
+        `;
+      }).join(``);
+    }
+
+    // Converters
+    function populateMonthSelects() {
+      const gSel = document.getElementById(`conv-g-month`);
+      const cSel = document.getElementById(`conv-c-month`);
+      if (gSel) {
+        gSel.innerHTML = GREG_MONTHS.map(function (m, i) {
+          return `<option value="${i + 1}">${toEastern(i + 1)} — ${m}</option>`;
+        }).join(``);
+        gSel.value = String(appState.convGreg.month);
+      }
+      if (cSel) {
+        cSel.innerHTML = COPTIC_MONTHS.map(function (m, i) {
+          return `<option value="${i + 1}">${toEastern(i + 1)} — ${m}</option>`;
+        }).join(``);
+        cSel.value = String(appState.convCoptic.month);
+      }
+    }
+
+    function convertGregToCoptic() {
+      const dayEl = document.getElementById(`conv-g-day`);
+      const monEl = document.getElementById(`conv-g-month`);
+      const yearEl = document.getElementById(`conv-g-year`);
+      const statusEl = document.getElementById(`conv-g-status`);
+      const resEl = document.getElementById(`conv-g-result`);
+      const metaEl = document.getElementById(`conv-g-meta`);
+      if (!dayEl || !monEl || !yearEl || !resEl || !metaEl) return;
+
+      const d = toWesternNumber(dayEl.value);
+      const m = parseInt(monEl.value, 10);
+      const y = toWesternNumber(yearEl.value);
+
+      if (isNaN(d) || isNaN(y) || y < 285 || y > 3284 || d < 1 || d > 31) {
+        if (statusEl) {
+          statusEl.className = `status-msg is-error`;
+          statusEl.textContent = `يرجى إدخال يوم (١–٣١) وسنة ميلادية صحيحة (٢٨٥–٣٢٨٤).`;
+        }
+        return;
+      }
+
+      const monthDays = [31, isGregorianLeap(y) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+      if (d > monthDays[m - 1]) {
+        if (statusEl) {
+          statusEl.className = `status-msg is-error`;
+          statusEl.textContent = `شهر ${GREG_MONTHS[m - 1]} ${toEastern(y)} يحتوي على ${toEastern(monthDays[m - 1])} يوماً فقط.`;
+        }
+        return;
+      }
+
+      if (statusEl) {
+        statusEl.className = `status-msg`;
+        statusEl.textContent = ``;
+      }
+
+      appState.convGreg = { day: d, month: m, year: y };
+      const jdn = (y < 1582 || (y === 1582 && (m < 10 || (m === 10 && d < 15))))
+        ? julianToJdn(y, m, d)
+        : gregorianToJdn(y, m, d);
+      const c = jdnToCoptic(jdn);
+      const wd = WEEKDAYS[jdnWeekdayIndex(jdn)];
+
+      resEl.textContent = `${wd} ${formatCopticDate(c)}`;
+      const cLeapTxt = isCopticLeap(c.year) ? `سنة شهداء كبيسة إضافية (٦ أيام نسئ)` : `سنة شهداء بسيطة (٥ أيام نسئ)`;
+      const gLeapTxt = isGregorianLeap(y) ? `سنة ميلادية كبيسة` : `سنة ميلادية بسيطة`;
+      metaEl.textContent = `${cLeapTxt} • ${gLeapTxt}`;
+      saveStateSafe();
+    }
+
+    function convertCopticToGreg() {
+      const dayEl = document.getElementById(`conv-c-day`);
+      const monEl = document.getElementById(`conv-c-month`);
+      const yearEl = document.getElementById(`conv-c-year`);
+      const statusEl = document.getElementById(`conv-c-status`);
+      const resEl = document.getElementById(`conv-c-result`);
+      const metaEl = document.getElementById(`conv-c-meta`);
+      if (!dayEl || !monEl || !yearEl || !resEl || !metaEl) return;
+
+      const d = toWesternNumber(dayEl.value);
+      const m = parseInt(monEl.value, 10);
+      const y = toWesternNumber(yearEl.value);
+
+      if (isNaN(d) || isNaN(y) || y < 1 || y > 3000 || d < 1 || d > 30) {
+        if (statusEl) {
+          statusEl.className = `status-msg is-error`;
+          statusEl.textContent = `يرجى إدخال يوم قبطي صحيح وسنة شهداء بين ١ و٣٠٠٠.`;
+        }
+        return;
+      }
+
+      const maxD = m === 13 ? (isCopticLeap(y) ? 6 : 5) : 30;
+      if (d > maxD) {
+        if (statusEl) {
+          statusEl.className = `status-msg is-error`;
+          statusEl.textContent = `شهر ${COPTIC_MONTHS[m - 1]} سنة ${toEastern(y)} ش يحتوي على ${toEastern(maxD)} ${maxD === 6 ? `أيام` : `أيام`} فقط.`;
+        }
+        return;
+      }
+
+      if (statusEl) {
+        statusEl.className = `status-msg`;
+        statusEl.textContent = ``;
+      }
+
+      appState.convCoptic = { day: d, month: m, year: y };
+      const jdn = copticToJdn(y, m, d);
+      const g = jdnToGregorian(jdn);
+      const wd = WEEKDAYS[jdnWeekdayIndex(jdn)];
+
+      resEl.textContent = `${wd} ${formatGregDate(g)}`;
+      const cLeapTxt = isCopticLeap(y) ? `سنة شهداء كبيسة إضافية (٦ أيام نسئ)` : `سنة شهداء بسيطة (٥ أيام نسئ)`;
+      const gLeapTxt = isGregorianLeap(g.year) ? `توافق سنة ميلادية كبيسة` : `توافق سنة ميلادية بسيطة`;
+      metaEl.textContent = `${cLeapTxt} • ${gLeapTxt}`;
+      saveStateSafe();
+    }
+
+    // Event Handlers (hoisted function declarations)
+    function setInputMode(mode) {
+      appState.inputMode = mode;
+      const btnC = document.getElementById(`mode-coptic-btn`);
+      const btnG = document.getElementById(`mode-greg-btn`);
+      const label = document.getElementById(`year-input-label`);
+      if (btnC) btnC.classList.toggle(`active`, mode === `coptic`);
+      if (btnG) btnG.classList.toggle(`active`, mode === `gregorian`);
+      if (label) {
+        label.textContent = mode === `coptic`
+          ? `أدخل سنة الشهداء (من ١ إلى ٣٠٠٠ ش)`
+          : `أدخل السنة الميلادية لعيد القيامة (من ٢٨٥ إلى ٣٢٨٤ م)`;
+      }
+      normalizeYearInputDisplay();
+      saveStateSafe();
+    }
+
+    function normalizeYearInputDisplay() {
+      const inp = document.getElementById(`year-input`);
+      if (!inp) return;
+      const shown = appState.inputMode === `coptic`
+        ? appState.copticYear
+        : appState.copticYear + 284;
+      inp.value = toEastern(shown);
+    }
+
+    function handleYearTyping(rawVal) {
+      const statusEl = document.getElementById(`input-status`);
+      const num = toWesternNumber(rawVal);
+      if (isNaN(num)) {
+        if (statusEl) {
+          statusEl.className = `status-msg is-error`;
+          statusEl.textContent = `أدخل رقماً صحيحاً للسنة بالأرقام العربية أو اللاتينية.`;
+        }
+        return;
+      }
+
+      const targetCoptic = appState.inputMode === `coptic` ? num : (num - 284);
+      if (targetCoptic < 1 || targetCoptic > 3000) {
+        if (statusEl) {
+          statusEl.className = `status-msg is-error`;
+          statusEl.textContent = appState.inputMode === `coptic`
+            ? `السنة خارج النطاق المسموح (يرجى اختيار سنة شهداء بين ١ و٣٠٠٠).`
+            : `السنة خارج النطاق المسموح (يرجى اختيار سنة ميلادية بين ٢٨٥ و٣٢٨٤).`;
+        }
+        return;
+      }
+
+      if (statusEl) {
+        statusEl.className = `status-msg`;
+        statusEl.textContent = ``;
+      }
+
+      appState.copticYear = targetCoptic;
+      const inp = document.getElementById(`year-input`);
+      if (inp) inp.value = toEastern(num);
+      renderAll();
+      saveStateSafe();
+    }
+
+    function stepYear(delta) {
+      const next = Math.min(3000, Math.max(1, appState.copticYear + delta));
+      appState.copticYear = next;
+      normalizeYearInputDisplay();
+      const statusEl = document.getElementById(`input-status`);
+      if (statusEl) {
+        statusEl.className = `status-msg`;
+        statusEl.textContent = ``;
+      }
+      renderAll();
+      saveStateSafe();
+    }
+
+    function selectPresetCoptic(yc) {
+      appState.copticYear = yc;
+      normalizeYearInputDisplay();
+      const statusEl = document.getElementById(`input-status`);
+      if (statusEl) {
+        statusEl.className = `status-msg`;
+        statusEl.textContent = ``;
+      }
+      renderAll();
+      saveStateSafe();
+    }
+
+    function updatePresetHighlight() {
+      const buttons = document.querySelectorAll(`.preset-btn`);
+      buttons.forEach(function (b) {
+        const y = parseInt(b.getAttribute(`data-coptic`), 10);
+        b.classList.toggle(`active`, y === appState.copticYear);
+      });
+    }
+
+    function setFeastFilter(filterKey) {
+      appState.feastFilter = filterKey;
+      const btns = document.querySelectorAll(`.filter-btn`);
+      btns.forEach(function (b) {
+        b.classList.toggle(`active`, b.getAttribute(`data-filter`) === filterKey);
+      });
+      const data = computeEpactYear(appState.copticYear);
+      renderFixedFeasts(data);
+      saveStateSafe();
+    }
+
+    function buildPlainTextReport(data) {
+      const m = data.movable;
+      const lines = [
+        `حاسبة علم الأبقطي وتقويم الشهداء — إعداد: م. جوزيف عادل يوسف قليني`,
+        `================================================================`,
+        `سنة الشهداء: ${toEastern(data.yc)} ش | السنة الميلادية للقيامة: ${toEastern(data.gregEasterYear)} م`,
+        `رأس السنة القبطية (١ توت): ${data.startDayName} الموافق ${formatGregDate(data.nyGreg)}`,
+        `دور الشمس: ${toEastern(data.sunCycle)} | أبقطي الشمس: ${toEastern(data.sunEpact)}`,
+        `دور القمر: ${toEastern(data.moonCycle)} | أبقطي القمر: ${toEastern(data.moonEpact)}`,
+        `ذبح خروف الفصح: ${WEEKDAYS[data.passoverWd]} ${toEastern(data.passoverDay)} ${COPTIC_MONTHS[data.passoverMonth - 1]} (${formatGregDate(jdnToGregorian(data.passoverJdn))})`,
+        `----------------------------------------------------------------`,
+        `المواسم والأعياد المتحركة:`,
+        `- رفاع صوم يونان: ${formatCopticDate(jdnToCoptic(m.jonahRifaJdn))} (${formatGregDate(jdnToGregorian(m.jonahRifaJdn))})`,
+        `- بداية صوم يونان: ${formatCopticDate(jdnToCoptic(m.jonahStartJdn))} (${formatGregDate(jdnToGregorian(m.jonahStartJdn))})`,
+        `- رفاع الصوم الكبير: ${formatCopticDate(jdnToCoptic(m.lentRifaJdn))} (${formatGregDate(jdnToGregorian(m.lentRifaJdn))})`,
+        `- بداية الصوم الكبير: ${formatCopticDate(jdnToCoptic(m.lentStartJdn))} (${formatGregDate(jdnToGregorian(m.lentStartJdn))}) | رفاع الميلاد: ${toEastern(data.rifaNativityDays)} يوماً`,
+        `- سبت لعازر: ${formatCopticDate(jdnToCoptic(m.lazarusSatJdn))} (${formatGregDate(jdnToGregorian(m.lazarusSatJdn))})`,
+        `- أحد الشعانين: ${formatCopticDate(jdnToCoptic(m.palmSunJdn))} (${formatGregDate(jdnToGregorian(m.palmSunJdn))})`,
+        `- خميس العهد: ${formatCopticDate(jdnToCoptic(m.covenantThuJdn))} (${formatGregDate(jdnToGregorian(m.covenantThuJdn))})`,
+        `- الجمعة العظيمة: ${formatCopticDate(jdnToCoptic(m.goodFriJdn))} (${formatGregDate(jdnToGregorian(m.goodFriJdn))})`,
+        `- عيد القيامة المجيد: الأحد ${formatCopticDate(data.easterCoptic)} (${formatGregDate(data.easterGreg)})`,
+        `- أحد توما: ${formatCopticDate(jdnToCoptic(m.thomasSunJdn))} (${formatGregDate(jdnToGregorian(m.thomasSunJdn))})`,
+        `- عيد الصعود المجيد: ${formatCopticDate(jdnToCoptic(m.ascensionJdn))} (${formatGregDate(jdnToGregorian(m.ascensionJdn))})`,
+        `- عيد العنصرة المجيد: ${formatCopticDate(jdnToCoptic(m.pentecostJdn))} (${formatGregDate(jdnToGregorian(m.pentecostJdn))})`,
+        `- بداية صوم الرسل: ${formatCopticDate(jdnToCoptic(m.apostlesStartJdn))} (${formatGregDate(jdnToGregorian(m.apostlesStartJdn))}) | مدة الصوم: ${toEastern(data.apostlesFastDays)} يوماً`
+      ];
+      return lines.join(`\n`);
+    }
+
+    function copySummaryToClipboard() {
+      const data = computeEpactYear(appState.copticYear);
+      const report = buildPlainTextReport(data);
+      const statusEl = document.getElementById(`input-status`);
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(report).then(function () {
+          if (statusEl) {
+            statusEl.className = `status-msg is-success`;
+            statusEl.textContent = `تم نسخ ملخص حسابات سنة ${toEastern(data.yc)} ش بنجاح.`;
+          }
+        }).catch(function () {
+          if (statusEl) {
+            statusEl.className = `status-msg is-error`;
+            statusEl.textContent = `تعذر النسخ التلقائي في هذا المتصفح؛ يمكنك استخدام زر تصدير التقرير.`;
+          }
+        });
+      } else if (statusEl) {
+        statusEl.className = `status-msg is-error`;
+        statusEl.textContent = `النسخ التلقائي غير مدعوم هنا؛ استخدم زر تصدير التقرير السنوي.`;
+      }
+    }
+
+    function exportYearReport() {
+      const data = computeEpactYear(appState.copticYear);
+      const report = buildPlainTextReport(data);
+      const statusEl = document.getElementById(`input-status`);
+      if (window.notebookAppApi && typeof window.notebookAppApi.triggerFileDownload === `function`) {
+        window.notebookAppApi.triggerFileDownload({
+          content: report,
+          contentType: `text/plain`,
+          encoding: `UTF-8`,
+          filename: `epact_${data.yc}_AM.txt`
+        });
+        if (statusEl) {
+          statusEl.className = `status-msg is-success`;
+          statusEl.textContent = `تم تصدير التقرير النصي لسنة ${toEastern(data.yc)} ش.`;
+        }
+      } else {
+        const blob = new Blob([report], { type: `text/plain;charset=utf-8` });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement(`a`);
+        a.href = url;
+        a.download = `epact_${data.yc}_AM.txt`;
+        a.click();
+        URL.revokeObjectURL(url);
+        if (statusEl) {
+          statusEl.className = `status-msg is-success`;
+          statusEl.textContent = `تم تنزيل التقرير النصي لسنة ${toEastern(data.yc)} ش.`;
+        }
+      }
+    }
+
+    // State Persistence via Gemini Notebook Shim API
+    async function saveStateSafe() {
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.setAppState === `function`) {
+          await window.notebookAppApi.setAppState({
+            inputMode: appState.inputMode,
+            copticYear: appState.copticYear,
+            feastFilter: appState.feastFilter,
+            convGreg: appState.convGreg,
+            convCoptic: appState.convCoptic
+          });
+        }
+      } catch (err) {
+        // Ignore persistence errors silently when offline
+      }
+    }
+
+    async function initApp() {
+      populateMonthSelects();
+
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.getAppState === `function`) {
+          const saved = await window.notebookAppApi.getAppState();
+          if (saved && typeof saved === `object`) {
+            if (saved.inputMode === `coptic` || saved.inputMode === `gregorian`) {
+              appState.inputMode = saved.inputMode;
+            }
+            if (typeof saved.copticYear === `number` && saved.copticYear >= 1 && saved.copticYear <= 3000) {
+              appState.copticYear = saved.copticYear;
+            }
+            if (typeof saved.feastFilter === `string`) {
+              appState.feastFilter = saved.feastFilter;
+            }
+            if (saved.convGreg && typeof saved.convGreg.year === `number`) {
+              appState.convGreg = saved.convGreg;
+            }
+            if (saved.convCoptic && typeof saved.convCoptic.year === `number`) {
+              appState.convCoptic = saved.convCoptic;
+            }
+          }
+        }
+      } catch (err) {
+        // Use defaults if state fetch fails
+      }
+
+      // Apply restored UI values
+      setInputMode(appState.inputMode);
+
+      const gDay = document.getElementById(`conv-g-day`);
+      const gMon = document.getElementById(`conv-g-month`);
+      const gYr = document.getElementById(`conv-g-year`);
+      if (gDay) gDay.value = toEastern(appState.convGreg.day);
+      if (gMon) gMon.value = String(appState.convGreg.month);
+      if (gYr) gYr.value = toEastern(appState.convGreg.year);
+
+      const cDay = document.getElementById(`conv-c-day`);
+      const cMon = document.getElementById(`conv-c-month`);
+      const cYr = document.getElementById(`conv-c-year`);
+      if (cDay) cDay.value = toEastern(appState.convCoptic.day);
+      if (cMon) cMon.value = String(appState.convCoptic.month);
+      if (cYr) cYr.value = toEastern(appState.convCoptic.year);
+
+      const btns = document.querySelectorAll(`.filter-btn`);
+      btns.forEach(function (b) {
+        b.classList.toggle(`active`, b.getAttribute(`data-filter`) === appState.feastFilter);
+      });
+
+      renderAll();
+      convertGregToCoptic();
+      convertCopticToGreg();
+
+      if (window.notebookAppApi && typeof window.notebookAppApi.notifyAppReady === `function`) {
+        window.notebookAppApi.notifyAppReady();
+      }
+    }
+
+    document.addEventListener(`DOMContentLoaded`, initApp);
+  </script>
+</body>
+</html>
